@@ -3,18 +3,18 @@ goandroid
 
 Patches to the Go tools and runtime to enable Android apps to interface with Go code, and a simple OpenGL ES 2 Android demo app written in Go.
 
-Running [Go](https://golang.org) code from Android apps is currently not possible, because the Go tools can only output executables while Android requires any foreign code in shared library (.so) format. This repository contains patches for the Go tools and runtime to enable shared library output, including workarounds to Android specific limitations. It also includes a simple example app written in Go to demonstrate OpenGL graphics and touch input.
+Running [Go](http://golang.org) code from Android apps is currently not possible, because the Go tools can only output executables while Android requires any foreign code in shared library (.so) format. This repository contains patches for the Go tools and runtime to enable shared library output, including workarounds to Android specific limitations. It also includes a simple example app written in Go to demonstrate OpenGL graphics and touch input.
 
-This guide assumes you're running on linux and have an android device connected through USB.
+This guide assumes you're running linux and have an android device connected through USB.
 
 Set up
 ------
 
-1. Make sure mercurial is installed
+1. Make sure [mercurial](http://mercurial.selenic.com/) is installed
 2. Download and install the [NDK](http://developer.android.com/tools/sdk/ndk/index.html). These instructions assumes the NDK is installed in `$NDK`.
 3. Create a standalone NDK toolchain (as described in $NDK/docs/STANDALONE-TOOLCHAIN.html):
 
-	`$NDK/build/tools/make-standalone-toolchain.sh --system=linux-x86_64 --platform=android-9 --install-dir=ndk-toolchain`
+	`$NDK/build/tools/make-standalone-toolchain.sh --platform=android-9 --install-dir=ndk-toolchain`
 
 	You might need to add `--system=linux-x86_64` or `--system=darwin-x86_64` depending on your system.
 
@@ -30,19 +30,19 @@ Set up
 
 5. Enable the `mq` extension by adding the following lines to `go/.hg/hgrc`:
 
-	`[extensions]
+	[extensions]
 	mq =
 
 	[ui]
-	username = me<me@mail.com>`
+	username = me<me@mail.com>
 
 6. In the `go/src` directory apply the patches and build go:
 
-	`cd go/src
+	cd go/src
 	hg qpush -a
 	CGO_ENABLED=0 GOARCH=arm ./make.bash
 	CC="$NDK_TOOLCHAIN/bin/arm-linux-androideabi-gcc" GOARCH=arm GOARM=7 CGO_ENABLED=1 ../bin/go install -tags android -a -v std
-	cd ../..`
+	cd ../..
 
 Building and installing the Android example app
 ------------
