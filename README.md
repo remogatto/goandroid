@@ -1,9 +1,9 @@
 goandroid
 =========
 
-Patches to the Go tools and runtime to enable Android apps to interface with Go code, and a simple OpenGL ES 2 Android demo app written in Go.
+Patches to the Go tools and runtime to enable Android apps to interface directly with a shared library written in Go. Goandroid also includes a simple demo written in Go, showing off OpenGL ES 2 and touch input.
 
-Running [Go](http://golang.org) code from Android apps is currently not possible, because the Go tools can only output executables while Android requires any foreign code in shared library (.so) format. This repository contains patches for the Go tools and runtime to enable shared library output, including workarounds to Android specific limitations. It also includes a simple example app written in Go to demonstrate OpenGL graphics and touch input.
+Running [Go](http://golang.org) code from Android apps is currently not possible, because the Go tools can only output executables while Android requires any foreign code in shared library (.so) format. This repository contains patches for the Go tools and runtime to enable shared library output, including workarounds to Android specific limitations. It also includes a simple example app written in Go to demonstrate OpenGL ES 2 graphics and touch input.
 
 This guide assumes you're running linux and have an android device connected through USB.
 
