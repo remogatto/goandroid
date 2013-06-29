@@ -1,9 +1,9 @@
 # HG changeset patch
-# Parent 481dfb0f9aac38957f56cb0c5b1f5f76ad799b0c
+# Parent 9dc377d326c1a17cedcdfdedf06e449dfa5c8673
 
-diff -r 481dfb0f9aac src/cmd/5l/asm.c
---- a/src/cmd/5l/asm.c	Thu Jun 27 17:49:59 2013 +0200
-+++ b/src/cmd/5l/asm.c	Thu Jun 27 17:52:47 2013 +0200
+diff -r 9dc377d326c1 src/cmd/5l/asm.c
+--- a/src/cmd/5l/asm.c	Sat Jun 29 10:52:02 2013 +0200
++++ b/src/cmd/5l/asm.c	Sat Jun 29 17:27:01 2013 +0200
 @@ -954,7 +954,7 @@
  			rel->siz = 4;
  			rel->sym = p->to.sym;
@@ -13,9 +13,9 @@ diff -r 481dfb0f9aac src/cmd/5l/asm.c
  				rel->type = D_TLS;
  				if(flag_shared)
  					rel->add += pc - p->pcrel->pc - 8 - rel->siz;
-diff -r 481dfb0f9aac src/cmd/5l/l.h
---- a/src/cmd/5l/l.h	Thu Jun 27 17:49:59 2013 +0200
-+++ b/src/cmd/5l/l.h	Thu Jun 27 17:52:47 2013 +0200
+diff -r 9dc377d326c1 src/cmd/5l/l.h
+--- a/src/cmd/5l/l.h	Sat Jun 29 10:52:02 2013 +0200
++++ b/src/cmd/5l/l.h	Sat Jun 29 17:27:01 2013 +0200
 @@ -326,6 +326,7 @@
  EXTERN	int	goarm;
  EXTERN	Sym*	adrgotype;	// type symbol on last Adr read
@@ -24,9 +24,9 @@ diff -r 481dfb0f9aac src/cmd/5l/l.h
  
  extern	char*	anames[];
  extern	Optab	optab[];
-diff -r 481dfb0f9aac src/cmd/5l/obj.c
---- a/src/cmd/5l/obj.c	Thu Jun 27 17:49:59 2013 +0200
-+++ b/src/cmd/5l/obj.c	Thu Jun 27 17:52:47 2013 +0200
+diff -r 9dc377d326c1 src/cmd/5l/obj.c
+--- a/src/cmd/5l/obj.c	Sat Jun 29 10:52:02 2013 +0200
++++ b/src/cmd/5l/obj.c	Sat Jun 29 17:27:01 2013 +0200
 @@ -93,6 +93,7 @@
  		debug['F'] = 1;
  
@@ -48,9 +48,9 @@ diff -r 481dfb0f9aac src/cmd/5l/obj.c
  
  	// mark some functions that are only referenced after linker code editing
  	if(debug['F'])
-diff -r 481dfb0f9aac src/cmd/ld/symtab.c
---- a/src/cmd/ld/symtab.c	Thu Jun 27 17:49:59 2013 +0200
-+++ b/src/cmd/ld/symtab.c	Thu Jun 27 17:52:47 2013 +0200
+diff -r 9dc377d326c1 src/cmd/ld/symtab.c
+--- a/src/cmd/ld/symtab.c	Sat Jun 29 10:52:02 2013 +0200
++++ b/src/cmd/ld/symtab.c	Sat Jun 29 17:27:01 2013 +0200
 @@ -182,13 +182,15 @@
  	
  	if(linkmode == LinkExternal && HEADTYPE != Hopenbsd) {
@@ -73,16 +73,15 @@ diff -r 481dfb0f9aac src/cmd/ld/symtab.c
  	}
  
  	elfbind = STB_GLOBAL;
-diff -r 481dfb0f9aac src/pkg/runtime/cgo/cgo_android_arm.c
+diff -r 9dc377d326c1 src/pkg/runtime/cgo/cgo_android_arm.c
 --- /dev/null	Thu Jan 01 00:00:00 1970 +0000
-+++ b/src/pkg/runtime/cgo/cgo_android_arm.c	Thu Jun 27 17:52:47 2013 +0200
-@@ -0,0 +1,13 @@
++++ b/src/pkg/runtime/cgo/cgo_android_arm.c	Sat Jun 29 17:27:01 2013 +0200
+@@ -0,0 +1,12 @@
 +// Copyright 2013 The Go Authors.  All rights reserved.
 +// Use of this source code is governed by a BSD-style
 +// license that can be found in the LICENSE file.
 +
 +// +build android
-+
 +#include "../runtime.h"
 +#include "../cgocall.h"
 +
@@ -90,10 +89,10 @@ diff -r 481dfb0f9aac src/pkg/runtime/cgo/cgo_android_arm.c
 +extern void x_cgo_tls_setup(void (*)(void*));
 +void (*_cgo_tls_setup)(void (*)(void*)) = x_cgo_tls_setup;
 +
-diff -r 481dfb0f9aac src/pkg/runtime/cgo/gcc_android_arm.c
+diff -r 9dc377d326c1 src/pkg/runtime/cgo/gcc_android_arm.c
 --- /dev/null	Thu Jan 01 00:00:00 1970 +0000
-+++ b/src/pkg/runtime/cgo/gcc_android_arm.c	Thu Jun 27 17:52:47 2013 +0200
-@@ -0,0 +1,77 @@
++++ b/src/pkg/runtime/cgo/gcc_android_arm.c	Sat Jun 29 17:27:01 2013 +0200
+@@ -0,0 +1,88 @@
 +// Copyright 2009 The Go Authors.  All rights reserved.
 +// Use of this source code is governed by a BSD-style
 +// license that can be found in the LICENSE file.
@@ -107,6 +106,7 @@ diff -r 481dfb0f9aac src/pkg/runtime/cgo/gcc_android_arm.c
 +#include <stdlib.h>
 +#include <stdio.h>
 +#include <string.h> // strerror
++#include <android/log.h>
 +#include "libcgo.h"
 +
 +static pthread_key_t k1;
@@ -118,52 +118,62 @@ diff -r 481dfb0f9aac src/pkg/runtime/cgo/gcc_android_arm.c
 +void
 +x_cgo_tls_setup(void **tlsoffset, void **tlsbase)
 +{
-+	pthread_key_t tofree[128], prev_k, k;
++	pthread_key_t tofree[50], prev_k, k;
 +	int i, ntofree;
++	void **tls1, **tls2;
 +
++	// tlsbase is the tls base address used by runtime.save_gm
++	// and runtime.load_gm. They offset the base address with 8,
++	// so we'll do that too.
++	tlsbase = (void **)(((char *)tlsbase) + 8);
 +	/*
 +	 * Allocate thread-local storage slots for m, g.
 +	 *
-+	 * The linux/arm linker puts the TLS offset for our TLS space in
-+	 * runtime.tlsgm. However, the Android linker does not support TLS
-+	 * relocations, so we'll mimic the linker by finding two
-+	 * consecutive TLS slots with pthread_key_create and assign the
-+	 * offset from the TLS base to runtime.tlsgm.
++	 * The linux linker use R_ARM_TLS_IE32 relocations to puts the TLS
++	 * offset for our TLS space into runtime.tlsgm. However, the Android
++	 * linker does not support TLS relocations, so we'll mimic the linker
++	 * by finding two consecutive TLS slots with pthread_key_create and
++	 * assign the offset from the TLS base to runtime.tlsgm.
 +	 */
-+	if(pthread_key_create(&prev_k, nil) < 0) {
-+		fprintf(stderr, "runtime/cgo: pthread_key_create failed\n");
++	if(pthread_key_create(&prev_k, nil) != 0) {
++		__android_log_print(ANDROID_LOG_ERROR, "Go runtime", "runtime/cgo: pthread_key_create failed");
 +		abort();
 +	}
 +	ntofree = 0;
 +	while(1) {
-+		if(pthread_key_create(&k, nil) < 0) {
-+			fprintf(stderr, "runtime/cgo: pthread_key_create failed\n");
++		if(pthread_key_create(&k, nil) != 0) {
++			__android_log_print(ANDROID_LOG_ERROR, "Go runtime", "runtime/cgo: pthread_key_create failed");
 +			abort();
 +		}
 +		pthread_setspecific(prev_k, (void*)magic1);
 +		pthread_setspecific(k, (void*)magic2);
 +		for(i=0; i<nelem(tofree); i++) {
-+			if((*(tlsbase + i) == (void*)magic1 && *(tlsbase + i + 1) == (void*)magic2) ||
-+				(*(tlsbase + i) == (void*)magic2 && *(tlsbase + i + 1) == (void*)magic1)) {
++			tls1 = tlsbase + i;
++			tls2 = tlsbase + i + 1;
++			if((*tls1 == (void*)magic1 && *tls2 == (void*)magic2) ||
++				(*tls1 == (void*)magic2 && *tls2 == (void*)magic1)) {
 +				k1 = prev_k;
 +				k2 = k;
-+				*tlsoffset = (void*)i + 8;
-+				break;
++				*tlsoffset = (void*)(i*sizeof(void *));
++				goto done;
 +			}
 +		}
 +		pthread_setspecific(prev_k, 0);
 +		pthread_setspecific(k, 0);
 +		if(ntofree >= nelem(tofree)) {
-+			fprintf(stderr, "runtime/cgo: could not obtain pthread_keys\n");
-+			fprintf(stderr, "\ttried");
++			__android_log_print(ANDROID_LOG_ERROR, "Go runtime", "runtime/cgo: could not obtain pthread_keys");
++			__android_log_print(ANDROID_LOG_ERROR, "Go runtime", "runtime/cgo: tried:");
 +			for(i=0; i<ntofree; i++)
-+				fprintf(stderr, " %#x", (unsigned)tofree[i]);
-+			fprintf(stderr, "\n");
++				__android_log_print(ANDROID_LOG_ERROR, "Go runtime", " %#x", (unsigned)tofree[i]);
 +			abort();
 +		}
 +		tofree[ntofree++] = prev_k;
 +		prev_k = k;
 +	}
++
++done:
++	pthread_setspecific(prev_k, 0);
++	pthread_setspecific(k, 0);
 +
 +	/*
 +	 * We got the keys we wanted.  Free the others.
@@ -171,9 +181,9 @@ diff -r 481dfb0f9aac src/pkg/runtime/cgo/gcc_android_arm.c
 +	for(i=0; i<ntofree; i++)
 +		pthread_key_delete(tofree[i]);
 +}
-diff -r 481dfb0f9aac src/pkg/runtime/rt0_linux_arm.s
---- a/src/pkg/runtime/rt0_linux_arm.s	Thu Jun 27 17:49:59 2013 +0200
-+++ b/src/pkg/runtime/rt0_linux_arm.s	Thu Jun 27 17:52:47 2013 +0200
+diff -r 9dc377d326c1 src/pkg/runtime/rt0_linux_arm.s
+--- a/src/pkg/runtime/rt0_linux_arm.s	Sat Jun 29 10:52:02 2013 +0200
++++ b/src/pkg/runtime/rt0_linux_arm.s	Sat Jun 29 17:27:01 2013 +0200
 @@ -84,6 +84,12 @@
  	B		(R4)
  
@@ -187,9 +197,9 @@ diff -r 481dfb0f9aac src/pkg/runtime/rt0_linux_arm.s
  	MOVW    $_rt0_arm_linux1(SB), R0
  	MOVW    _cgo_lib_setup(SB), R3
  	BL		(R3)
-diff -r 481dfb0f9aac src/pkg/runtime/runtime.c
---- a/src/pkg/runtime/runtime.c	Thu Jun 27 17:49:59 2013 +0200
-+++ b/src/pkg/runtime/runtime.c	Thu Jun 27 17:52:47 2013 +0200
+diff -r 9dc377d326c1 src/pkg/runtime/runtime.c
+--- a/src/pkg/runtime/runtime.c	Sat Jun 29 10:52:02 2013 +0200
++++ b/src/pkg/runtime/runtime.c	Sat Jun 29 17:27:01 2013 +0200
 @@ -76,6 +76,7 @@
  
  void (*runtime·sysargs)(int32, uint8**);

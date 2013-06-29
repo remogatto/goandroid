@@ -7,8 +7,7 @@ Running [Go](http://golang.org) code from Android apps is currently not possible
 
 This guide assumes you're running linux and have an android device connected through USB.
 
-Set up
-------
+### Set up ###
 
 1. Make sure [mercurial](http://mercurial.selenic.com/) is installed
 2. Download and install the [NDK](http://developer.android.com/tools/sdk/ndk/index.html). These instructions assumes the NDK is installed in `$NDK`.
@@ -48,7 +47,14 @@ Set up
 	cd ../..
 	```
 
-Building and installing the Android example app
-------------
+### Building and installing the example app ###
 
-If everything is set up correctly, you should be able to run `build.sh` in the goandroid root to build and copy `libandroid.so` to android/libs. Then, running `ant clean debug install` will build and install the final apk to the connected device. Running the app should display a simple color animated triangle that you can move around the screen with your finger.
+If everything is set up correctly, you should be able to run `build.sh` in the goandroid root to build and copy `libandroid.so` to android/libs. Then, running `ant -f android/build.xml clean debug install` will build and install the final apk to the connected device. Running the app should display a simple color animated triangle that you can move around the screen with your finger.
+
+### Go patches ###
+
+All patches except `android-tls` and `android-build-hacks` correspond to the patches for linux/arm external linking and shared library support discussed on the [golang-nuts mailing list](https://groups.google.com/d/msg/golang-nuts/zmjXkGrEx6Q/L4R8qyw7WW4J).
+
+The `android-tls` patch is a workaround for the missing support for the `R_ARM_TLS_IE32` relocation in the Android linker.
+
+The `android-build-hacks` patch contains various changes to account for the difference between a vanilla linux/arm system and Android.
