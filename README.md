@@ -1,4 +1,4 @@
-goandroid
+A simple OpenGL ES 2 Android app in Go
 =========
 
-A simple example of running go code from an Android app
+
