@@ -30,19 +30,19 @@ Set up
 
 5. Enable the `mq` extension by adding the following lines to `go/.hg/hgrc`:
 
-	`[extensions]  
+	```[extensions]  
 	mq =  
 
 	[ui]  
-	username = me<me@mail.com>`
+	username = me<me@mail.com>```
 
 6. In the `go/src` directory apply the patches and build go:
 
-	`cd go/src  
+	```cd go/src  
 	hg qpush -a  
 	CGO_ENABLED=0 GOARCH=arm ./make.bash  
 	CC="$NDK_TOOLCHAIN/bin/arm-linux-androideabi-gcc" GOARCH=arm GOARM=7 CGO_ENABLED=1 ../bin/go install -tags android -a -v std  
-	cd ../..`
+	cd ../..```
 
 Building and installing the Android example app
 ------------
