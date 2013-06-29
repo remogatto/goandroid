@@ -1,4 +1,4 @@
 goandroid
 =========
 
-A simple example of running go code from and Android app
+A simple example of running go code from an Android app
