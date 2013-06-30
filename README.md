@@ -33,7 +33,8 @@ This guide assumes you're running linux and have an android device connected thr
 
 	```
 	[extensions]  
-	mq =  
+	mq =
+	codereview = !
 
 	[ui]  
 	username = me<me@mail.com>
