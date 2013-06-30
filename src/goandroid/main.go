@@ -14,6 +14,7 @@ import (
 	"log"
 	"math"
 	"runtime"
+	"sync"
 	"unsafe"
 )
 
@@ -30,7 +31,9 @@ type game struct {
 	width, height       int
 	offsetUni, colorUni int
 
+	mu               sync.Mutex // Protects offsetX, offsetY
 	offsetX, offsetY float32
+
 	touching         bool
 	touchX, touchY   float32
 }
@@ -199,7 +202,11 @@ func (game *game) drawFrame() {
 	time += .05
 	color := (C.GLclampf(math.Sin(time)) + 1) * .5
 
-	C.glUniform2f(C.GLint(game.offsetUni), C.GLfloat(game.offsetX), C.GLfloat(game.offsetY))
+	game.mu.Lock()
+	offX := game.offsetX
+	offY := game.offsetY
+	game.mu.Unlock()
+	C.glUniform2f(C.GLint(game.offsetUni), C.GLfloat(offX), C.GLfloat(offY))
 	C.glUniform3f(C.GLint(game.colorUni), 1.0, C.GLfloat(color), 0)
 	C.glClear(C.GL_COLOR_BUFFER_BIT | C.GL_DEPTH_BUFFER_BIT)
 
@@ -218,8 +225,10 @@ func (game *game) onTouch(action int, x, y float32) {
 		if !game.touching {
 			break
 		}
+		game.mu.Lock()
 		game.offsetX += 2 * (x - game.touchX) / float32(game.width)
 		game.offsetY += 2 * -(y - game.touchY) / float32(game.height)
+		game.mu.Unlock()
 		game.touchX, game.touchY = x, y
 	}
 }
