@@ -49,7 +49,7 @@ This guide assumes you're running linux and have an android device connected thr
 
 ### Building and installing the example app ###
 
-If everything is set up correctly, you should be able to run `build.sh` in the goandroid root to build and copy `libandroid.so` to android/libs. Then, running `ant -f android/build.xml clean debug install` will build and install the final apk to the connected device. Running the app should display a simple color animated triangle that you can move around the screen with your finger.
+If everything is set up correctly, you should be able to run `build.sh` in the goandroid root to build and copy `libgoandroid.so` to android/libs. Then, running `ant -f android/build.xml clean debug install` will build and install the final apk to the connected device. Running the app should display a simple color animated triangle that you can move around the screen with your finger.
 
 ### Go patches ###
 
