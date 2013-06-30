@@ -45,7 +45,7 @@ This guide assumes you're running linux and have an android device connected thr
 	cd go/src  
 	hg qpush -a  
 	CGO_ENABLED=0 GOOS=linux GOARCH=arm ./make.bash  
-	CC="$NDK_TOOLCHAIN/bin/arm-linux-androideabi-gcc" GOARCH=arm GOARM=7 CGO_ENABLED=1 ../bin/go install -tags android -a -v std  
+	CC="$NDK_TOOLCHAIN/bin/arm-linux-androideabi-gcc" GOOS=linux GOARCH=arm GOARM=7 CGO_ENABLED=1 ../bin/go install -tags android -a -v std  
 	cd ../..
 	```
 
