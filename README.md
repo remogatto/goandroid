@@ -5,9 +5,11 @@ Patches to the Go tools and runtime to enable Android apps to interface directly
 
 Running [Go](http://golang.org) code from Android apps is currently not possible, because the Go tools can only output executables while Android requires any foreign code in shared library (.so) format. This repository contains patches for the Go tools and runtime to enable shared library output, including workarounds to Android specific limitations. It also includes a simple example app written in Go to demonstrate OpenGL ES 2 graphics and touch input.
 
-This guide assumes you're running linux and have an android device connected through USB.
+*Disclaimer*: Please note that the patches are unofficial, and while I hope the Go developers will eventually incorporate at least the patches not specific to Android, there's no guarantee they will.
 
 ### Set up ###
+
+This guide assumes you're running linux and have an android device connected through USB.
 
 1. Make sure [mercurial](http://mercurial.selenic.com/) is installed
 2. Download and install the [NDK](http://developer.android.com/tools/sdk/ndk/index.html). These instructions assumes the NDK is installed in `$NDK`.
