@@ -1,5 +1,5 @@
 # HG changeset patch
-# Parent 70734d763b860585b8b80371d1c67b6533986cc6
+# Parent c8634228aa5b650b42dcedbf77db34c92a19fdb3
 
 diff --git a/misc/cgo/testshared/main.c b/misc/cgo/testshared/main.c
 new file mode 100644
@@ -227,7 +227,7 @@ new file mode 100755
 diff --git a/src/pkg/runtime/asm_386.s b/src/pkg/runtime/asm_386.s
 --- a/src/pkg/runtime/asm_386.s
 +++ b/src/pkg/runtime/asm_386.s
-@@ -1228,3 +1228,8 @@
+@@ -1235,3 +1235,8 @@
  	SETEQ	CX	// 1 if alen == blen
  	LEAL	-1(CX)(AX*2), AX	// 1,0,-1 result
  	RET
@@ -249,7 +249,17 @@ diff --git a/src/pkg/runtime/asm_amd64.s b/src/pkg/runtime/asm_amd64.s
  	PUSHQ	$0			// arg size
  	CALL	runtime·newproc(SB)
  	POPQ	AX
-@@ -781,7 +782,8 @@
+@@ -234,7 +235,8 @@
+ 	
+ 	// Save our own state as the PC and SP to restore
+ 	// if this goroutine needs to be restarted.
+-	MOVQ	$reflect·call(SB), (g_sched+gobuf_pc)(AX)
++	MOVQ	$reflect·call(SB), DX
++	MOVQ	DX, (g_sched+gobuf_pc)(AX)
+ 	MOVQ	SP, (g_sched+gobuf_sp)(AX)
+ 
+ 	// Set up morestack arguments to call f on a new stack.
+@@ -788,7 +790,8 @@
  	// a page boundary, so we can load it directly.
  	MOVOU	(AX), X1
  	ADDQ	CX, CX
@@ -259,7 +269,7 @@ diff --git a/src/pkg/runtime/asm_amd64.s b/src/pkg/runtime/asm_amd64.s
  	JMP	partial
  highpartial:
  	// address ends in 1111xxxx.  Might be up against
-@@ -789,7 +791,8 @@
+@@ -796,7 +799,8 @@
  	// Then shift bytes down using pshufb.
  	MOVOU	-16(AX)(CX*1), X1
  	ADDQ	CX, CX
@@ -269,7 +279,7 @@ diff --git a/src/pkg/runtime/asm_amd64.s b/src/pkg/runtime/asm_amd64.s
  partial:
  	// incorporate partial block into hash
  	AESENC	X3, X0
-@@ -1138,3 +1141,9 @@
+@@ -1145,3 +1149,9 @@
  	SETEQ	CX	// 1 if alen == blen
  	LEAQ	-1(CX)(AX*2), AX	// 1,0,-1 result
  	RET
@@ -282,7 +292,7 @@ diff --git a/src/pkg/runtime/asm_amd64.s b/src/pkg/runtime/asm_amd64.s
 diff --git a/src/pkg/runtime/asm_arm.s b/src/pkg/runtime/asm_arm.s
 --- a/src/pkg/runtime/asm_arm.s
 +++ b/src/pkg/runtime/asm_arm.s
-@@ -525,6 +525,11 @@
+@@ -537,6 +537,11 @@
  	MOVW	12(R0), m
  	RET
  
@@ -587,7 +597,7 @@ diff --git a/src/pkg/runtime/proc.c b/src/pkg/runtime/proc.c
  uint32	runtime·gcwaiting;
  M	runtime·m0;
  G	runtime·g0;	 // idle goroutine for m0
-@@ -161,6 +162,17 @@
+@@ -160,6 +161,17 @@
  
  static FuncVal scavenger = {runtime·MHeap_Scavenger};
  
@@ -605,7 +615,7 @@ diff --git a/src/pkg/runtime/proc.c b/src/pkg/runtime/proc.c
  // The main goroutine.
  void
  runtime·main(void)
-@@ -181,6 +193,15 @@
+@@ -180,6 +192,15 @@
  	runtime·unlockOSThread();
  
  	main·main();
@@ -621,7 +631,7 @@ diff --git a/src/pkg/runtime/proc.c b/src/pkg/runtime/proc.c
  	if(raceenabled)
  		runtime·racefini();
  
-@@ -594,11 +615,15 @@
+@@ -611,11 +632,15 @@
  	M *mp;
  
  	if(runtime·needextram) {
@@ -707,7 +717,7 @@ diff --git a/src/pkg/runtime/runtime.c b/src/pkg/runtime/runtime.c
 diff --git a/src/pkg/runtime/runtime.h b/src/pkg/runtime/runtime.h
 --- a/src/pkg/runtime/runtime.h
 +++ b/src/pkg/runtime/runtime.h
-@@ -699,6 +699,7 @@
+@@ -704,6 +704,7 @@
  extern	int8*	runtime·goos;
  extern	int32	runtime·ncpu;
  extern	bool	runtime·iscgo;
