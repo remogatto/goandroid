@@ -9,11 +9,10 @@ Running [Go](http://golang.org) code from Android apps is currently not possible
 
 ### Set up ###
 
-This guide assumes you're running linux and have an android device connected through USB.
+This guide is tested on linux/amd64 and assumes you have an android device connected through USB and that you meet the requirements for [building Go from source](http://golang.org/doc/install/source).
 
-1. Make sure [mercurial](http://mercurial.selenic.com/) is installed
-2. Download and install the [NDK](http://developer.android.com/tools/sdk/ndk/index.html) at least version r8e. These instructions assumes the NDK is installed in `$NDK`.
-3. Create a standalone NDK toolchain (as described in $NDK/docs/STANDALONE-TOOLCHAIN.html):
+1. Download and install the [NDK](http://developer.android.com/tools/sdk/ndk/index.html) at least version r8e. These instructions assumes the NDK is installed in `$NDK`.
+2. Create a standalone NDK toolchain (as described in $NDK/docs/STANDALONE-TOOLCHAIN.html):
 
 	`$NDK/build/tools/make-standalone-toolchain.sh --platform=android-9 --install-dir=ndk-toolchain`
 
