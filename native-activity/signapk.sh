@@ -1,4 +1,7 @@
 #!/bin/bash
+#
+# Original signapk.sh script from https://code.google.com/p/apk-resigner/
+#
 # Sample usage is as follows;
 # ./signapk myapp.apk debug.keystore android androiddebugkey
 # 
