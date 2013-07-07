@@ -240,8 +240,8 @@ func JNI_OnLoad(vm *C.JavaVM, reserved unsafe.Pointer) C.jint {
 	return C.JNI_VERSION_1_6
 }
 
-//export Java_net_goandroid_Engine_drawFrame
-func Java_net_goandroid_Engine_drawFrame(env *C.JNIEnv, clazz C.jclass) {
+//export Java_net_goandroid_hellogl2_Engine_drawFrame
+func Java_net_goandroid_hellogl2_Engine_drawFrame(env *C.JNIEnv, clazz C.jclass) {
 	defer func() {
 		if err := recover(); err != nil {
 			log.Fatalf("panic: drawFrame: %v\n", err)
@@ -250,8 +250,8 @@ func Java_net_goandroid_Engine_drawFrame(env *C.JNIEnv, clazz C.jclass) {
 	g.drawFrame()
 }
 
-//export Java_net_goandroid_Engine_init
-func Java_net_goandroid_Engine_init(env *C.JNIEnv, clazz C.jclass) {
+//export Java_net_goandroid_hellogl2_Engine_init
+func Java_net_goandroid_hellogl2_Engine_init(env *C.JNIEnv, clazz C.jclass) {
 	defer func() {
 		if err := recover(); err != nil {
 			log.Fatalf("panic: init: %v\n", err)
@@ -260,8 +260,8 @@ func Java_net_goandroid_Engine_init(env *C.JNIEnv, clazz C.jclass) {
 	g.initGL()
 }
 
-//export Java_net_goandroid_Engine_resize
-func Java_net_goandroid_Engine_resize(env *C.JNIEnv, clazz C.jclass, width, height C.jint) {
+//export Java_net_goandroid_hellogl2_Engine_resize
+func Java_net_goandroid_hellogl2_Engine_resize(env *C.JNIEnv, clazz C.jclass, width, height C.jint) {
 	defer func() {
 		if err := recover(); err != nil {
 			log.Fatalf("panic: resize: %v\n", err)
@@ -270,8 +270,8 @@ func Java_net_goandroid_Engine_resize(env *C.JNIEnv, clazz C.jclass, width, heig
 	g.resize(int(width), int(height))
 }
 
-//export Java_net_goandroid_Engine_onTouch
-func Java_net_goandroid_Engine_onTouch(env *C.JNIEnv, clazz C.jclass, action C.jint, x, y C.jfloat) {
+//export Java_net_goandroid_hellogl2_Engine_onTouch
+func Java_net_goandroid_hellogl2_Engine_onTouch(env *C.JNIEnv, clazz C.jclass, action C.jint, x, y C.jfloat) {
 	defer func() {
 		if err := recover(); err != nil {
 			log.Fatalf("panic: resize: %v\n", err)

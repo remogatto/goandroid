@@ -1,4 +1,4 @@
-package net.goandroid;
+package net.goandroid.hellogl2;
 
 public class Engine {
 	static native void resize(int w, int h);

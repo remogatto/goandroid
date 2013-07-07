@@ -1,4 +1,4 @@
-package net.goandroid;
+package net.goandroid.hellogl2;
 
 import android.app.Activity;
 import android.content.Context;
