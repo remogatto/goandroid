@@ -18,12 +18,6 @@ import (
 	"unsafe"
 )
 
-const (
-	AMOTION_EVENT_ACTION_DOWN = C.AMOTION_EVENT_ACTION_DOWN
-	AMOTION_EVENT_ACTION_UP   = C.AMOTION_EVENT_ACTION_UP
-	AMOTION_EVENT_ACTION_MOVE = C.AMOTION_EVENT_ACTION_MOVE
-)
-
 var time float64
 
 type game struct {
@@ -216,12 +210,12 @@ func (game *game) drawFrame() {
 
 func (game *game) onTouch(action int, x, y float32) {
 	switch action {
-	case AMOTION_EVENT_ACTION_UP:
+	case C.AMOTION_EVENT_ACTION_UP:
 		game.touching = false
-	case AMOTION_EVENT_ACTION_DOWN:
+	case C.AMOTION_EVENT_ACTION_DOWN:
 		game.touching = true
 		game.touchX, game.touchY = x, y
-	case AMOTION_EVENT_ACTION_MOVE:
+	case C.AMOTION_EVENT_ACTION_MOVE:
 		if !game.touching {
 			break
 		}
