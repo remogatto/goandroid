@@ -3,7 +3,7 @@ goandroid
 
 Patches to the Go tools and runtime to enable Android apps to interface directly with a shared library written in Go. Goandroid also includes two demos, `hellogl2` and `nativeactivity`, both written in Go.
 
-Running [Go](http://golang.org) code from Android apps is currently not possible, because the Go tools can only output executables while Android requires any foreign code in shared library (.so) format. This repository contains patches for the Go tools and runtime to enable shared library output, including workarounds to Android specific limitations. It also includes a simple example app written in Go to demonstrate OpenGL ES 2 graphics and touch input.
+Running [Go](http://golang.org) code from Android apps is currently not possible, because the Go tools can only output executables while Android requires any foreign code in shared library (.so) format. This repository contains patches for the Go tools and runtime to enable shared library output, including workarounds to Android specific limitations.
 
 *Disclaimer*: Please note that the patches are unofficial, and while I hope the Go developers will eventually incorporate at least the patches not specific to Android, there's no guarantee they will.
 
