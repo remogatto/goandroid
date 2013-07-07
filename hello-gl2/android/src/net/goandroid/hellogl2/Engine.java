@@ -7,6 +7,6 @@ public class Engine {
 	static native void onTouch(int action, float x, float y);
 
 	static {
-		System.loadLibrary("goandroid");
+		System.loadLibrary("hellogl2");
 	}
 }
