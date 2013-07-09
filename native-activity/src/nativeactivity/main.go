@@ -451,14 +451,6 @@ func onNativeWindowCreated(act *C.ANativeActivity, win unsafe.Pointer) {
 	log.Printf("onNativeWindowCreated done\n")
 }
 
-// Use JNI_OnLoad to ensure that the go runtime is initialized at a predictable time,
-// namely at System.loadLibrary()
-//export JNI_OnLoad
-func JNI_OnLoad(vm *C.JavaVM, reserved unsafe.Pointer) C.jint {
-	log.Printf("JNI_OnLoad\n")
-	return C.JNI_VERSION_1_6
-}
-
 func main() {
 	runtime.GOMAXPROCS(runtime.NumCPU())
 }
