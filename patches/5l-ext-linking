@@ -1,10 +1,10 @@
 # HG changeset patch
-# Parent 16a9205488cc1750839adf420df075b0e232e4ca
+# Parent 21eb7fc8d698ef8b58dc6bb33c32f57d0737f052
 
-diff -r 16a9205488cc src/cmd/5l/5.out.h
---- a/src/cmd/5l/5.out.h	Tue Jul 09 08:13:47 2013 +0200
-+++ b/src/cmd/5l/5.out.h	Tue Jul 09 08:15:32 2013 +0200
-@@ -277,7 +277,7 @@
+diff -r 21eb7fc8d698 src/cmd/5l/5.out.h
+--- a/src/cmd/5l/5.out.h	Sun Jul 21 10:56:00 2013 +0200
++++ b/src/cmd/5l/5.out.h	Sun Jul 21 10:57:01 2013 +0200
+@@ -276,7 +276,7 @@
  #define	D_PLT1		(D_NONE+44) // R_ARM_PLT32, 2nd inst: add ip, ip, #0xNN000
  #define	D_PLT2		(D_NONE+45) // R_ARM_PLT32, 3rd inst: ldr pc, [ip, #0xNNN]!
  #define	D_CALL		(D_NONE+46) // R_ARM_PLT32/R_ARM_CALL/R_ARM_JUMP24, bl xxxxx or b yyyyy
@@ -13,9 +13,9 @@ diff -r 16a9205488cc src/cmd/5l/5.out.h
  
  /*
   * this is the ranlib header
-diff -r 16a9205488cc src/cmd/5l/asm.c
---- a/src/cmd/5l/asm.c	Tue Jul 09 08:13:47 2013 +0200
-+++ b/src/cmd/5l/asm.c	Tue Jul 09 08:15:32 2013 +0200
+diff -r 21eb7fc8d698 src/cmd/5l/asm.c
+--- a/src/cmd/5l/asm.c	Sun Jul 21 10:56:00 2013 +0200
++++ b/src/cmd/5l/asm.c	Sun Jul 21 10:57:01 2013 +0200
 @@ -264,6 +264,23 @@
  		else
  			return -1;
@@ -75,7 +75,7 @@ diff -r 16a9205488cc src/cmd/5l/asm.c
  	switch(r->type) {
  	case D_CONST:
  		*val = r->add;
-@@ -759,7 +804,7 @@
+@@ -766,7 +811,7 @@
  }
  
  void
@@ -84,7 +84,7 @@ diff -r 16a9205488cc src/cmd/5l/asm.c
  {
  	int32 o1, o2, o3, o4, o5, o6, v;
  	int r, rf, rt, rt2;
-@@ -842,11 +887,19 @@
+@@ -849,11 +894,19 @@
  		break;
  
  	case 5:		/* bra s */
@@ -106,7 +106,7 @@ diff -r 16a9205488cc src/cmd/5l/asm.c
  		o1 |= (v >> 2) & 0xffffff;
  		break;
  
-@@ -904,7 +957,11 @@
+@@ -911,7 +964,11 @@
  			rel->siz = 4;
  			rel->sym = p->to.sym;
  			rel->add = p->to.offset;
@@ -119,7 +119,7 @@ diff -r 16a9205488cc src/cmd/5l/asm.c
  				rel->type = D_PCREL;
  				rel->add += pc - p->pcrel->pc - 8;
  			} else
-@@ -1235,9 +1292,22 @@
+@@ -1242,9 +1299,22 @@
  
  	case 63:	/* bcase */
  		if(p->cond != P) {
@@ -145,10 +145,10 @@ diff -r 16a9205488cc src/cmd/5l/asm.c
  		}
  		break;
  
-diff -r 16a9205488cc src/cmd/5l/l.h
---- a/src/cmd/5l/l.h	Tue Jul 09 08:13:47 2013 +0200
-+++ b/src/cmd/5l/l.h	Tue Jul 09 08:15:32 2013 +0200
-@@ -366,7 +366,7 @@
+diff -r 21eb7fc8d698 src/cmd/5l/l.h
+--- a/src/cmd/5l/l.h	Sun Jul 21 10:56:00 2013 +0200
++++ b/src/cmd/5l/l.h	Sun Jul 21 10:57:01 2013 +0200
+@@ -364,7 +364,7 @@
  void	addhist(int32, int);
  Prog*	appendp(Prog*);
  void	asmb(void);
@@ -157,19 +157,19 @@ diff -r 16a9205488cc src/cmd/5l/l.h
  int32	atolwhex(char*);
  Prog*	brloop(Prog*);
  void	buildop(void);
-diff -r 16a9205488cc src/cmd/5l/noop.c
---- a/src/cmd/5l/noop.c	Tue Jul 09 08:13:47 2013 +0200
-+++ b/src/cmd/5l/noop.c	Tue Jul 09 08:15:32 2013 +0200
-@@ -59,7 +59,7 @@
- 	Prog *p, *q, *q1, *q2;
+diff -r 21eb7fc8d698 src/cmd/5l/noop.c
+--- a/src/cmd/5l/noop.c	Sun Jul 21 10:56:00 2013 +0200
++++ b/src/cmd/5l/noop.c	Sun Jul 21 10:57:01 2013 +0200
+@@ -60,7 +60,7 @@
  	int o;
+ 	int32 arg;
  	Prog *pmorestack;
 -	Sym *symmorestack, *tlsfallback;
 +	Sym *symmorestack, *tlsfallback, *gmsym;
  
  	/*
  	 * find leaf subroutines
-@@ -82,6 +82,9 @@
+@@ -83,6 +83,9 @@
  	pmorestack->reg |= NOSPLIT;
  
  	tlsfallback = lookup("runtime.read_tls_fallback", 0);
@@ -179,7 +179,7 @@ diff -r 16a9205488cc src/cmd/5l/noop.c
  	q = P;
  	for(cursym = textp; cursym != nil; cursym = cursym->next) {
  		for(p = cursym->text; p != P; p = p->link) {
-@@ -164,6 +167,35 @@
+@@ -165,6 +168,35 @@
  						p->to.offset = 0;
  						cursym->text->mark &= ~LEAF;
  					}
@@ -215,9 +215,9 @@ diff -r 16a9205488cc src/cmd/5l/noop.c
  				}
  			}
  			q = p;
-diff -r 16a9205488cc src/cmd/5l/obj.c
---- a/src/cmd/5l/obj.c	Tue Jul 09 08:13:47 2013 +0200
-+++ b/src/cmd/5l/obj.c	Tue Jul 09 08:15:32 2013 +0200
+diff -r 21eb7fc8d698 src/cmd/5l/obj.c
+--- a/src/cmd/5l/obj.c	Sun Jul 21 10:56:00 2013 +0200
++++ b/src/cmd/5l/obj.c	Sun Jul 21 10:57:01 2013 +0200
 @@ -82,7 +82,7 @@
  	INITRND = -1;
  	INITENTRY = 0;
@@ -271,9 +271,9 @@ diff -r 16a9205488cc src/cmd/5l/obj.c
  	switch(HEADTYPE) {
  	default:
  		diag("unknown -H option");
-diff -r 16a9205488cc src/cmd/5l/optab.c
---- a/src/cmd/5l/optab.c	Tue Jul 09 08:13:47 2013 +0200
-+++ b/src/cmd/5l/optab.c	Tue Jul 09 08:15:32 2013 +0200
+diff -r 21eb7fc8d698 src/cmd/5l/optab.c
+--- a/src/cmd/5l/optab.c	Sun Jul 21 10:56:00 2013 +0200
++++ b/src/cmd/5l/optab.c	Sun Jul 21 10:57:01 2013 +0200
 @@ -182,7 +182,7 @@
  	{ AMOVBU,	C_REG,	C_NONE,	C_SHIFT,	61, 4, 0 },
  
@@ -283,9 +283,9 @@ diff -r 16a9205488cc src/cmd/5l/optab.c
  
  	{ AMOVH,	C_REG,	C_NONE, C_HAUTO,	70, 4, REGSP,	0 },
  	{ AMOVH,	C_REG,	C_NONE,	C_HOREG,	70, 4, 0,	0 },
-diff -r 16a9205488cc src/cmd/5l/span.c
---- a/src/cmd/5l/span.c	Tue Jul 09 08:13:47 2013 +0200
-+++ b/src/cmd/5l/span.c	Tue Jul 09 08:15:32 2013 +0200
+diff -r 21eb7fc8d698 src/cmd/5l/span.c
+--- a/src/cmd/5l/span.c	Sun Jul 21 10:56:00 2013 +0200
++++ b/src/cmd/5l/span.c	Sun Jul 21 10:57:01 2013 +0200
 @@ -90,7 +90,7 @@
  	int32 c, otxt, out[6];
  	Section *sect;
@@ -314,9 +314,9 @@ diff -r 16a9205488cc src/cmd/5l/span.c
  			for(i=0; i<o->size/4; i++) {
  				v = out[i];
  				*bp++ = v;
-diff -r 16a9205488cc src/cmd/8l/asm.c
---- a/src/cmd/8l/asm.c	Tue Jul 09 08:13:47 2013 +0200
-+++ b/src/cmd/8l/asm.c	Tue Jul 09 08:15:32 2013 +0200
+diff -r 21eb7fc8d698 src/cmd/8l/asm.c
+--- a/src/cmd/8l/asm.c	Sun Jul 21 10:56:00 2013 +0200
++++ b/src/cmd/8l/asm.c	Sun Jul 21 10:57:01 2013 +0200
 @@ -366,6 +366,8 @@
  archreloc(Reloc *r, Sym *s, vlong *val)
  {
@@ -326,9 +326,9 @@ diff -r 16a9205488cc src/cmd/8l/asm.c
  	switch(r->type) {
  	case D_CONST:
  		*val = r->add;
-diff -r 16a9205488cc src/cmd/ld/data.c
---- a/src/cmd/ld/data.c	Tue Jul 09 08:13:47 2013 +0200
-+++ b/src/cmd/ld/data.c	Tue Jul 09 08:15:32 2013 +0200
+diff -r 21eb7fc8d698 src/cmd/ld/data.c
+--- a/src/cmd/ld/data.c	Sun Jul 21 10:56:00 2013 +0200
++++ b/src/cmd/ld/data.c	Sun Jul 21 10:57:01 2013 +0200
 @@ -178,7 +178,7 @@
  		switch(r->type) {
  		default:
@@ -338,9 +338,9 @@ diff -r 16a9205488cc src/cmd/ld/data.c
  				diag("unknown reloc %d", r->type);
  			break;
  		case D_TLS:
-diff -r 16a9205488cc src/cmd/ld/elf.h
---- a/src/cmd/ld/elf.h	Tue Jul 09 08:13:47 2013 +0200
-+++ b/src/cmd/ld/elf.h	Tue Jul 09 08:15:32 2013 +0200
+diff -r 21eb7fc8d698 src/cmd/ld/elf.h
+--- a/src/cmd/ld/elf.h	Sun Jul 21 10:56:00 2013 +0200
++++ b/src/cmd/ld/elf.h	Sun Jul 21 10:57:01 2013 +0200
 @@ -569,6 +569,7 @@
  #define	R_ARM_GOT_PREL		96
  #define	R_ARM_GNU_VTENTRY	100
@@ -358,10 +358,10 @@ diff -r 16a9205488cc src/cmd/ld/elf.h
  
  
  #define	R_386_NONE	0	/* No relocation. */
-diff -r 16a9205488cc src/cmd/ld/lib.c
---- a/src/cmd/ld/lib.c	Tue Jul 09 08:13:47 2013 +0200
-+++ b/src/cmd/ld/lib.c	Tue Jul 09 08:15:32 2013 +0200
-@@ -672,7 +672,7 @@
+diff -r 21eb7fc8d698 src/cmd/ld/lib.c
+--- a/src/cmd/ld/lib.c	Sun Jul 21 10:56:00 2013 +0200
++++ b/src/cmd/ld/lib.c	Sun Jul 21 10:57:01 2013 +0200
+@@ -688,7 +688,7 @@
  		argv[argc++] = "-m64";
  		break;
  	case '5':
@@ -370,10 +370,10 @@ diff -r 16a9205488cc src/cmd/ld/lib.c
  		break;
  	}
  	if(!debug['s'] && !debug_s) {
-diff -r 16a9205488cc src/pkg/runtime/asm_arm.s
---- a/src/pkg/runtime/asm_arm.s	Tue Jul 09 08:13:47 2013 +0200
-+++ b/src/pkg/runtime/asm_arm.s	Tue Jul 09 08:15:32 2013 +0200
-@@ -11,7 +11,7 @@
+diff -r 21eb7fc8d698 src/pkg/runtime/asm_arm.s
+--- a/src/pkg/runtime/asm_arm.s	Sun Jul 21 10:56:00 2013 +0200
++++ b/src/pkg/runtime/asm_arm.s	Sun Jul 21 10:57:01 2013 +0200
+@@ -12,7 +12,7 @@
  	// copy arguments forward on an even stack
  	// use R13 instead of SP to avoid linker rewriting the offsets
  	MOVW	0(R13), R0		// argc
@@ -382,9 +382,9 @@ diff -r 16a9205488cc src/pkg/runtime/asm_arm.s
  	SUB	$64, R13		// plenty of scratch
  	AND	$~7, R13
  	MOVW	R0, 60(R13)		// save argc, argv away
-diff -r 16a9205488cc src/pkg/runtime/os_linux_arm.c
---- a/src/pkg/runtime/os_linux_arm.c	Tue Jul 09 08:13:47 2013 +0200
-+++ b/src/pkg/runtime/os_linux_arm.c	Tue Jul 09 08:15:32 2013 +0200
+diff -r 21eb7fc8d698 src/pkg/runtime/os_linux_arm.c
+--- a/src/pkg/runtime/os_linux_arm.c	Sun Jul 21 10:56:00 2013 +0200
++++ b/src/pkg/runtime/os_linux_arm.c	Sun Jul 21 10:57:01 2013 +0200
 @@ -34,16 +34,13 @@
  
  #pragma textflag 7
@@ -403,9 +403,9 @@ diff -r 16a9205488cc src/pkg/runtime/os_linux_arm.c
  	// skip envp to get to ELF auxiliary vector.
  	for(envp = &argv[argc+1]; *envp != nil; envp++)
  		;
-diff -r 16a9205488cc src/pkg/runtime/rt0_freebsd_arm.s
---- a/src/pkg/runtime/rt0_freebsd_arm.s	Tue Jul 09 08:13:47 2013 +0200
-+++ b/src/pkg/runtime/rt0_freebsd_arm.s	Tue Jul 09 08:15:32 2013 +0200
+diff -r 21eb7fc8d698 src/pkg/runtime/rt0_freebsd_arm.s
+--- a/src/pkg/runtime/rt0_freebsd_arm.s	Sun Jul 21 10:56:00 2013 +0200
++++ b/src/pkg/runtime/rt0_freebsd_arm.s	Sun Jul 21 10:57:01 2013 +0200
 @@ -5,4 +5,7 @@
  // FreeBSD and Linux use the same linkage to main
  
@@ -414,9 +414,9 @@ diff -r 16a9205488cc src/pkg/runtime/rt0_freebsd_arm.s
 +	MOVW	$4(R13), R1		// argv
 +	MOVM.DB.W [R0-R1], (R13)
  	B	_rt0_go(SB)
-diff -r 16a9205488cc src/pkg/runtime/rt0_linux_arm.s
---- a/src/pkg/runtime/rt0_linux_arm.s	Tue Jul 09 08:13:47 2013 +0200
-+++ b/src/pkg/runtime/rt0_linux_arm.s	Tue Jul 09 08:15:32 2013 +0200
+diff -r 21eb7fc8d698 src/pkg/runtime/rt0_linux_arm.s
+--- a/src/pkg/runtime/rt0_linux_arm.s	Sun Jul 21 10:56:00 2013 +0200
++++ b/src/pkg/runtime/rt0_linux_arm.s	Sun Jul 21 10:57:01 2013 +0200
 @@ -3,6 +3,12 @@
  // license that can be found in the LICENSE file.
  
@@ -455,9 +455,9 @@ diff -r 16a9205488cc src/pkg/runtime/rt0_linux_arm.s
 +	MOVW	$_rt0_arm_linux1(SB), R4
 +	B		(R4)
 +
-diff -r 16a9205488cc src/pkg/runtime/rt0_netbsd_arm.s
---- a/src/pkg/runtime/rt0_netbsd_arm.s	Tue Jul 09 08:13:47 2013 +0200
-+++ b/src/pkg/runtime/rt0_netbsd_arm.s	Tue Jul 09 08:15:32 2013 +0200
+diff -r 21eb7fc8d698 src/pkg/runtime/rt0_netbsd_arm.s
+--- a/src/pkg/runtime/rt0_netbsd_arm.s	Sun Jul 21 10:56:00 2013 +0200
++++ b/src/pkg/runtime/rt0_netbsd_arm.s	Sun Jul 21 10:57:01 2013 +0200
 @@ -5,4 +5,7 @@
  // FreeBSD/NetBSD and Linux use the same linkage to main
  
@@ -466,15 +466,15 @@ diff -r 16a9205488cc src/pkg/runtime/rt0_netbsd_arm.s
 +	MOVW	$4(R13), R1		// argv
 +	MOVM.DB.W [R0-R1], (R13)
  	B _rt0_go(SB)
-diff -r 16a9205488cc src/run.bash
---- a/src/run.bash	Tue Jul 09 08:13:47 2013 +0200
-+++ b/src/run.bash	Tue Jul 09 08:15:32 2013 +0200
-@@ -100,7 +100,7 @@
- 	*) go test -ldflags '-linkmode=external' ;;
+diff -r 21eb7fc8d698 src/run.bash
+--- a/src/run.bash	Sun Jul 21 10:56:00 2013 +0200
++++ b/src/run.bash	Sun Jul 21 10:57:01 2013 +0200
+@@ -117,7 +117,7 @@
+ 	*) go test -ldflags '-linkmode=external'  || exit 1;;
  	esac
  	;;
 -freebsd-386 | freebsd-amd64 | linux-386 | linux-amd64 | netbsd-386 | netbsd-amd64)
 +freebsd-386 | freebsd-amd64 | linux-386 | linux-amd64 | linux-arm | netbsd-386 | netbsd-amd64)
- 	go test -ldflags '-linkmode=external'
- 	go test -ldflags '-linkmode=auto' ../testtls
- 	go test -ldflags '-linkmode=external' ../testtls
+ 	go test -ldflags '-linkmode=external' || exit 1
+ 	go test -ldflags '-linkmode=auto' ../testtls || exit 1
+ 	go test -ldflags '-linkmode=external' ../testtls || exit 1

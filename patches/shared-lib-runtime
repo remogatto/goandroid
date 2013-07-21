@@ -1,5 +1,5 @@
 # HG changeset patch
-# Parent c8634228aa5b650b42dcedbf77db34c92a19fdb3
+# Parent ecfa68fcbb894a285c115f0de9368417e45a6dae
 
 diff --git a/misc/cgo/testshared/main.c b/misc/cgo/testshared/main.c
 new file mode 100644
@@ -227,7 +227,7 @@ new file mode 100755
 diff --git a/src/pkg/runtime/asm_386.s b/src/pkg/runtime/asm_386.s
 --- a/src/pkg/runtime/asm_386.s
 +++ b/src/pkg/runtime/asm_386.s
-@@ -1235,3 +1235,8 @@
+@@ -1242,3 +1242,8 @@
  	SETEQ	CX	// 1 if alen == blen
  	LEAL	-1(CX)(AX*2), AX	// 1,0,-1 result
  	RET
@@ -239,7 +239,7 @@ diff --git a/src/pkg/runtime/asm_386.s b/src/pkg/runtime/asm_386.s
 diff --git a/src/pkg/runtime/asm_amd64.s b/src/pkg/runtime/asm_amd64.s
 --- a/src/pkg/runtime/asm_amd64.s
 +++ b/src/pkg/runtime/asm_amd64.s
-@@ -86,7 +86,8 @@
+@@ -87,7 +87,8 @@
  	CALL	runtime·schedinit(SB)
  
  	// create a new goroutine to start program
@@ -247,9 +247,9 @@ diff --git a/src/pkg/runtime/asm_amd64.s b/src/pkg/runtime/asm_amd64.s
 +	MOVQ	$runtime·main·f(SB),AX
 +	PUSHQ	AX		// entry
  	PUSHQ	$0			// arg size
+ 	ARGSIZE(16)
  	CALL	runtime·newproc(SB)
- 	POPQ	AX
-@@ -234,7 +235,8 @@
+@@ -245,7 +246,8 @@
  	
  	// Save our own state as the PC and SP to restore
  	// if this goroutine needs to be restarted.
@@ -259,27 +259,27 @@ diff --git a/src/pkg/runtime/asm_amd64.s b/src/pkg/runtime/asm_amd64.s
  	MOVQ	SP, (g_sched+gobuf_sp)(AX)
  
  	// Set up morestack arguments to call f on a new stack.
-@@ -788,7 +790,8 @@
+@@ -799,7 +801,8 @@
  	// a page boundary, so we can load it directly.
  	MOVOU	(AX), X1
  	ADDQ	CX, CX
--	PAND	masks(SB)(CX*8), X1
-+	MOVQ	$masks(SB), AX
-+	PAND	(AX)(CX*8), X1
+-	PAND	masks<>(SB)(CX*8), X1
++	MOVQ    $masks<>(SB), AX
++	PAND    (AX)(CX*8), X1
  	JMP	partial
  highpartial:
  	// address ends in 1111xxxx.  Might be up against
-@@ -796,7 +799,8 @@
+@@ -807,7 +810,8 @@
  	// Then shift bytes down using pshufb.
  	MOVOU	-16(AX)(CX*1), X1
  	ADDQ	CX, CX
--	PSHUFB	shifts(SB)(CX*8), X1
-+	MOVQ	$shifts(SB), AX
-+	PSHUFB	(AX)(CX*8), X1
+-	PSHUFB	shifts<>(SB)(CX*8), X1
++	MOVQ    $shifts<>(SB), AX
++	PSHUFB  (AX)(CX*8), X1
  partial:
  	// incorporate partial block into hash
  	AESENC	X3, X0
-@@ -1145,3 +1149,9 @@
+@@ -1154,3 +1158,9 @@
  	SETEQ	CX	// 1 if alen == blen
  	LEAQ	-1(CX)(AX*2), AX	// 1,0,-1 result
  	RET
@@ -292,7 +292,7 @@ diff --git a/src/pkg/runtime/asm_amd64.s b/src/pkg/runtime/asm_amd64.s
 diff --git a/src/pkg/runtime/asm_arm.s b/src/pkg/runtime/asm_arm.s
 --- a/src/pkg/runtime/asm_arm.s
 +++ b/src/pkg/runtime/asm_arm.s
-@@ -537,6 +537,11 @@
+@@ -549,6 +549,11 @@
  	MOVW	12(R0), m
  	RET
  
@@ -631,7 +631,7 @@ diff --git a/src/pkg/runtime/proc.c b/src/pkg/runtime/proc.c
  	if(raceenabled)
  		runtime·racefini();
  
-@@ -611,11 +632,15 @@
+@@ -617,11 +638,15 @@
  	M *mp;
  
  	if(runtime·needextram) {
@@ -717,7 +717,7 @@ diff --git a/src/pkg/runtime/runtime.c b/src/pkg/runtime/runtime.c
 diff --git a/src/pkg/runtime/runtime.h b/src/pkg/runtime/runtime.h
 --- a/src/pkg/runtime/runtime.h
 +++ b/src/pkg/runtime/runtime.h
-@@ -704,6 +704,7 @@
+@@ -702,6 +702,7 @@
  extern	int8*	runtime·goos;
  extern	int32	runtime·ncpu;
  extern	bool	runtime·iscgo;
@@ -828,7 +828,7 @@ diff --git a/src/pkg/runtime/vdso_linux_amd64.c b/src/pkg/runtime/vdso_linux_amd
 diff --git a/src/run.bash b/src/run.bash
 --- a/src/run.bash
 +++ b/src/run.bash
-@@ -108,6 +108,20 @@
+@@ -125,6 +125,20 @@
  ) || exit $?
  
  [ "$CGO_ENABLED" != 1 ] ||
@@ -848,4 +848,4 @@ diff --git a/src/run.bash b/src/run.bash
 +[ "$CGO_ENABLED" != 1 ] ||
  [ "$GOHOSTOS" == windows ] ||
  (xcd ../misc/cgo/testso
- ./test.bash
+ ./test.bash || exit 1
