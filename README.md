@@ -18,7 +18,7 @@ This guide is tested on linux/amd64 and assumes you have an android device conne
 
 	You might need to add `--system=linux-x86_64` or `--system=darwin-x86_64` depending on your system.
 
-	Set `$NDK_TOOLCHAIN` to point at the `ndk-toolchain` directory
+	Set `$NDK_ROOT` to point at the `ndk-toolchain` directory
 
 3. Clone the golang repository:
 
@@ -45,7 +45,7 @@ This guide is tested on linux/amd64 and assumes you have an android device conne
 	cd go/src  
 	hg qpush -a  
 	CGO_ENABLED=0 GOOS=linux GOARCH=arm ./make.bash  
-	CC="$NDK_TOOLCHAIN/bin/arm-linux-androideabi-gcc" GOOS=linux GOARCH=arm GOARM=7 CGO_ENABLED=1 ../bin/go install -tags android -a -v std  
+	CC="$NDK_ROOT/bin/arm-linux-androideabi-gcc" GOOS=linux GOARCH=arm GOARM=7 CGO_ENABLED=1 ../bin/go install -tags android -a -v std  
 	cd ../..
 	```
 
