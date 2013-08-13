@@ -1,5 +1,5 @@
 # HG changeset patch
-# Parent ddf082038c9f2fd7b3a2140cb01c311d7cdde70e
+# Parent ff2493bf1074926f9e4fd4624e7d96ea407586fb
 
 diff --git a/misc/cgo/testshared/main.c b/misc/cgo/testshared/main.c
 new file mode 100644
@@ -227,19 +227,19 @@ new file mode 100755
 diff --git a/src/pkg/runtime/asm_386.s b/src/pkg/runtime/asm_386.s
 --- a/src/pkg/runtime/asm_386.s
 +++ b/src/pkg/runtime/asm_386.s
-@@ -1350,3 +1350,8 @@
+@@ -1351,3 +1351,8 @@
  	SETEQ	CX	// 1 if alen == blen
  	LEAL	-1(CX)(AX*2), AX	// 1,0,-1 result
  	RET
 +
 +// Not implemented on 386 yet
-+TEXT runtime·lib_init(SB),7,$-4
++TEXT runtime·lib_init(SB),NOSPLIT,$-4
 +	MOVW	$0, AX
 +	MOVW	(AX), AX
 diff --git a/src/pkg/runtime/asm_amd64.s b/src/pkg/runtime/asm_amd64.s
 --- a/src/pkg/runtime/asm_amd64.s
 +++ b/src/pkg/runtime/asm_amd64.s
-@@ -87,7 +87,8 @@
+@@ -88,7 +88,8 @@
  	CALL	runtime·schedinit(SB)
  
  	// create a new goroutine to start program
@@ -249,7 +249,7 @@ diff --git a/src/pkg/runtime/asm_amd64.s b/src/pkg/runtime/asm_amd64.s
  	PUSHQ	$0			// arg size
  	ARGSIZE(16)
  	CALL	runtime·newproc(SB)
-@@ -245,7 +246,8 @@
+@@ -246,7 +247,8 @@
  	
  	// Save our own state as the PC and SP to restore
  	// if this goroutine needs to be restarted.
@@ -259,7 +259,7 @@ diff --git a/src/pkg/runtime/asm_amd64.s b/src/pkg/runtime/asm_amd64.s
  	MOVQ	SP, (g_sched+gobuf_sp)(AX)
  
  	// Set up morestack arguments to call f on a new stack.
-@@ -877,7 +879,8 @@
+@@ -878,7 +880,8 @@
  	// a page boundary, so we can load it directly.
  	MOVOU	(AX), X1
  	ADDQ	CX, CX
@@ -269,7 +269,7 @@ diff --git a/src/pkg/runtime/asm_amd64.s b/src/pkg/runtime/asm_amd64.s
  	JMP	partial
  highpartial:
  	// address ends in 1111xxxx.  Might be up against
-@@ -885,7 +888,8 @@
+@@ -886,7 +889,8 @@
  	// Then shift bytes down using pshufb.
  	MOVOU	-16(AX)(CX*1), X1
  	ADDQ	CX, CX
@@ -279,34 +279,32 @@ diff --git a/src/pkg/runtime/asm_amd64.s b/src/pkg/runtime/asm_amd64.s
  partial:
  	// incorporate partial block into hash
  	AESENC	X3, X0
-@@ -1220,6 +1224,12 @@
+@@ -1221,6 +1225,11 @@
  	LEAQ	-1(CX)(AX*2), AX	// 1,0,-1 result
  	RET
  
-+TEXT runtime·lib_init(SB),7,$-8
++TEXT runtime·lib_init(SB),NOSPLIT,$-8
 +	MOVQ    _cgo_lib_init(SB), AX
 +	CALL	AX
 +	RET
 +
-+
- TEXT bytes·IndexByte(SB),7,$0
+ TEXT bytes·IndexByte(SB),NOSPLIT,$0
  	MOVQ s+0(FP), SI
  	MOVQ s_len+8(FP), BX
 diff --git a/src/pkg/runtime/asm_arm.s b/src/pkg/runtime/asm_arm.s
 --- a/src/pkg/runtime/asm_arm.s
 +++ b/src/pkg/runtime/asm_arm.s
-@@ -640,6 +640,11 @@
- 	MOVW	12(R0), m
- 	RET
+@@ -647,6 +647,10 @@
+ 	MOVW	R1, g
+ 	B		runtime·save_gm(SB)
  
-+TEXT runtime·lib_init(SB),7,$0
++TEXT runtime·lib_init(SB),NOSPLIT,$0
 +	MOVW    _cgo_lib_init(SB), R4
 +	BL		(R4)
 +	RET
-+
- // void setmg_gcc(M*, G*); set m and g called from gcc.
- TEXT setmg_gcc<>(SB),7,$0
- 	MOVW	R0, m
+ 
+ // TODO: share code with memeq?
+ TEXT bytes·Equal(SB),NOSPLIT,$0
 diff --git a/src/pkg/runtime/cgo/gcc_sharedlib_linux.c b/src/pkg/runtime/cgo/gcc_sharedlib_linux.c
 new file mode 100644
 --- /dev/null
@@ -492,10 +490,10 @@ new file mode 100644
 diff --git a/src/pkg/runtime/os_linux_arm.c b/src/pkg/runtime/os_linux_arm.c
 --- a/src/pkg/runtime/os_linux_arm.c
 +++ b/src/pkg/runtime/os_linux_arm.c
-@@ -33,13 +33,52 @@
+@@ -34,13 +34,52 @@
  }
  
- #pragma textflag 7
+ #pragma textflag NOSPLIT
 -void
 -runtime·setup_auxv(int32 argc, byte **argv)
 +static void
@@ -523,7 +521,7 @@ diff --git a/src/pkg/runtime/os_linux_arm.c b/src/pkg/runtime/os_linux_arm.c
 +	}
 +}
 +	
-+#pragma textflag 7
++#pragma textflag NOSPLIT
 +static void
 +setup_auxv_from_proc(void)
 +{
@@ -538,7 +536,7 @@ diff --git a/src/pkg/runtime/os_linux_arm.c b/src/pkg/runtime/os_linux_arm.c
 +	runtime·close(auxv_fd);
 +}
 +
-+#pragma textflag 7
++#pragma textflag NOSPLIT
 +static void
 +setup_auxv_from_argv(int32 argc, byte **argv)
  {
@@ -549,7 +547,7 @@ diff --git a/src/pkg/runtime/os_linux_arm.c b/src/pkg/runtime/os_linux_arm.c
  
  	// skip envp to get to ELF auxiliary vector.
  	for(envp = &argv[argc+1]; *envp != nil; envp++)
-@@ -47,28 +86,21 @@
+@@ -48,28 +87,21 @@
  	envp++;
  	
  	for(auxv=(uint32*)envp; auxv[0] != AT_NULL; auxv += 2) {
@@ -575,7 +573,7 @@ diff --git a/src/pkg/runtime/os_linux_arm.c b/src/pkg/runtime/os_linux_arm.c
  	}
  }
  
- #pragma textflag 7
+ #pragma textflag NOSPLIT
 +void
 +runtime·setup_auxv(int32 argc, byte **argv)
 +{
@@ -585,14 +583,14 @@ diff --git a/src/pkg/runtime/os_linux_arm.c b/src/pkg/runtime/os_linux_arm.c
 +		setup_auxv_from_proc();
 +}
 +
-+#pragma textflag 7
++#pragma textflag NOSPLIT
  int64
  runtime·cputicks(void)
  {
 diff --git a/src/pkg/runtime/proc.c b/src/pkg/runtime/proc.c
 --- a/src/pkg/runtime/proc.c
 +++ b/src/pkg/runtime/proc.c
-@@ -62,6 +62,7 @@
+@@ -63,6 +63,7 @@
  int32	runtime·gomaxprocs;
  uint32	runtime·needextram;
  bool	runtime·iscgo;
@@ -600,7 +598,7 @@ diff --git a/src/pkg/runtime/proc.c b/src/pkg/runtime/proc.c
  uint32	runtime·gcwaiting;
  M	runtime·m0;
  G	runtime·g0;	 // idle goroutine for m0
-@@ -162,6 +163,17 @@
+@@ -163,6 +164,17 @@
  
  static FuncVal initDone = { runtime·unlockOSThread };
  
@@ -618,7 +616,7 @@ diff --git a/src/pkg/runtime/proc.c b/src/pkg/runtime/proc.c
  // The main goroutine.
  void
  runtime·main(void)
-@@ -198,6 +210,15 @@
+@@ -199,6 +211,15 @@
  	runtime·unlockOSThread();
  
  	main·main();
@@ -634,7 +632,7 @@ diff --git a/src/pkg/runtime/proc.c b/src/pkg/runtime/proc.c
  	if(raceenabled)
  		runtime·racefini();
  
-@@ -644,11 +665,15 @@
+@@ -673,11 +694,15 @@
  	M *mp;
  
  	if(runtime·needextram) {
@@ -658,12 +656,12 @@ diff --git a/src/pkg/runtime/proc.c b/src/pkg/runtime/proc.c
 diff --git a/src/pkg/runtime/rt0_linux_amd64.s b/src/pkg/runtime/rt0_linux_amd64.s
 --- a/src/pkg/runtime/rt0_linux_amd64.s
 +++ b/src/pkg/runtime/rt0_linux_amd64.s
-@@ -11,3 +11,9 @@
- TEXT main(SB),7,$-8
+@@ -13,3 +13,9 @@
+ TEXT main(SB),NOSPLIT,$-8
  	MOVQ	$_rt0_go(SB), AX
  	JMP	AX
 +
-+TEXT _rt0_amd64_linux_lib(SB),7,$0
++TEXT _rt0_amd64_linux_lib(SB),NOSPLIT,$0
 +	MOVQ    $_rt0_go(SB), DI
 +	MOVQ    _cgo_lib_setup(SB), AX
 +	CALL	AX
@@ -671,20 +669,19 @@ diff --git a/src/pkg/runtime/rt0_linux_amd64.s b/src/pkg/runtime/rt0_linux_amd64
 diff --git a/src/pkg/runtime/rt0_linux_arm.s b/src/pkg/runtime/rt0_linux_arm.s
 --- a/src/pkg/runtime/rt0_linux_arm.s
 +++ b/src/pkg/runtime/rt0_linux_arm.s
-@@ -83,3 +83,9 @@
+@@ -84,3 +84,8 @@
  	MOVW	$_rt0_arm_linux1(SB), R4
  	B		(R4)
  
-+TEXT _rt0_arm_linux_lib(SB),7,$0
++TEXT _rt0_arm_linux_lib(SB),NOSPLIT,$0
 +	MOVW    $_rt0_arm_linux1(SB), R0
 +	MOVW    _cgo_lib_setup(SB), R3
 +	BL		(R3)
-+
 +	RET
 diff --git a/src/pkg/runtime/runtime.c b/src/pkg/runtime/runtime.c
 --- a/src/pkg/runtime/runtime.c
 +++ b/src/pkg/runtime/runtime.c
-@@ -75,6 +75,7 @@
+@@ -76,6 +76,7 @@
  Slice syscall·envs;
  
  void (*runtime·sysargs)(int32, uint8**);
@@ -692,7 +689,7 @@ diff --git a/src/pkg/runtime/runtime.c b/src/pkg/runtime/runtime.c
  
  void
  runtime·args(int32 c, uint8 **v)
-@@ -116,13 +117,22 @@
+@@ -117,13 +118,22 @@
  {
  	String *s;
  	int32 i, n;
@@ -720,18 +717,18 @@ diff --git a/src/pkg/runtime/runtime.c b/src/pkg/runtime/runtime.c
 diff --git a/src/pkg/runtime/runtime.h b/src/pkg/runtime/runtime.h
 --- a/src/pkg/runtime/runtime.h
 +++ b/src/pkg/runtime/runtime.h
-@@ -705,6 +705,7 @@
+@@ -704,6 +704,7 @@
  extern	int8*	runtime·goos;
  extern	int32	runtime·ncpu;
  extern	bool	runtime·iscgo;
 +extern	bool	runtime·islibrary;
  extern 	void	(*runtime·sysargs)(int32, uint8**);
- extern	uint32	runtime·maxstring;
+ extern	uintptr	runtime·maxstring;
  extern	uint32	runtime·Hchansize;
 diff --git a/src/pkg/runtime/softfloat_arm.c b/src/pkg/runtime/softfloat_arm.c
 --- a/src/pkg/runtime/softfloat_arm.c
 +++ b/src/pkg/runtime/softfloat_arm.c
-@@ -201,6 +201,16 @@
+@@ -202,6 +202,16 @@
  			runtime·printf("*** cpu PC += %x\n", (delta+2)*4);
  		return delta+2;
  	}
@@ -831,7 +828,7 @@ diff --git a/src/pkg/runtime/vdso_linux_amd64.c b/src/pkg/runtime/vdso_linux_amd
 diff --git a/src/run.bash b/src/run.bash
 --- a/src/run.bash
 +++ b/src/run.bash
-@@ -133,6 +133,20 @@
+@@ -134,6 +134,20 @@
  ) || exit $?
  
  [ "$CGO_ENABLED" != 1 ] ||

@@ -1,9 +1,9 @@
 # HG changeset patch
-# Parent 6294f3ca30e15705a4fbc14e0f07af848d782318
+# Parent 6824ab56b42cf1df322535b82fd4ee97a1f28e49
 
-diff -r 6294f3ca30e1 src/cmd/5l/noop.c
---- a/src/cmd/5l/noop.c	Tue Aug 06 16:48:19 2013 +1000
-+++ b/src/cmd/5l/noop.c	Tue Aug 06 12:02:10 2013 +0200
+diff -r 6824ab56b42c src/cmd/5l/noop.c
+--- a/src/cmd/5l/noop.c	Tue Aug 13 17:21:33 2013 +0400
++++ b/src/cmd/5l/noop.c	Tue Aug 13 17:50:31 2013 +0200
 @@ -60,13 +60,14 @@
  	int o;
  	int32 arg;
@@ -54,9 +54,9 @@ diff -r 6294f3ca30e1 src/cmd/5l/noop.c
  			}
  			q = p;
  		}
-diff -r 6294f3ca30e1 src/cmd/5l/obj.c
---- a/src/cmd/5l/obj.c	Tue Aug 06 16:48:19 2013 +1000
-+++ b/src/cmd/5l/obj.c	Tue Aug 06 12:02:10 2013 +0200
+diff -r 6824ab56b42c src/cmd/5l/obj.c
+--- a/src/cmd/5l/obj.c	Tue Aug 13 17:21:33 2013 +0400
++++ b/src/cmd/5l/obj.c	Tue Aug 13 17:50:31 2013 +0200
 @@ -208,7 +208,7 @@
  	case Hnetbsd:
  		debug['d'] = 0;	// with dynamic linking
@@ -74,9 +74,9 @@ diff -r 6294f3ca30e1 src/cmd/5l/obj.c
  	deadcode();
  	if(textp == nil) {
  		diag("no code");
-diff -r 6294f3ca30e1 src/cmd/6l/span.c
---- a/src/cmd/6l/span.c	Tue Aug 06 16:48:19 2013 +1000
-+++ b/src/cmd/6l/span.c	Tue Aug 06 12:02:10 2013 +0200
+diff -r 6824ab56b42c src/cmd/6l/span.c
+--- a/src/cmd/6l/span.c	Tue Aug 13 17:21:33 2013 +0400
++++ b/src/cmd/6l/span.c	Tue Aug 13 17:50:31 2013 +0200
 @@ -888,18 +888,11 @@
  		
  		r = addrel(cursym);
@@ -99,9 +99,9 @@ diff -r 6294f3ca30e1 src/cmd/6l/span.c
  		r->sym = s;
  		r->xsym = s;
  		v = 0;
-diff -r 6294f3ca30e1 src/cmd/8l/span.c
---- a/src/cmd/8l/span.c	Tue Aug 06 16:48:19 2013 +1000
-+++ b/src/cmd/8l/span.c	Tue Aug 06 12:02:10 2013 +0200
+diff -r 6824ab56b42c src/cmd/8l/span.c
+--- a/src/cmd/8l/span.c	Tue Aug 13 17:21:33 2013 +0400
++++ b/src/cmd/8l/span.c	Tue Aug 13 17:50:31 2013 +0200
 @@ -695,18 +695,11 @@
  
  		r = addrel(cursym);
@@ -124,9 +124,9 @@ diff -r 6294f3ca30e1 src/cmd/8l/span.c
  		r->sym = s;
  		r->xsym = s;
  		v = 0;
-diff -r 6294f3ca30e1 src/cmd/ld/data.c
---- a/src/cmd/ld/data.c	Tue Aug 06 16:48:19 2013 +1000
-+++ b/src/cmd/ld/data.c	Tue Aug 06 12:02:10 2013 +0200
+diff -r 6824ab56b42c src/cmd/ld/data.c
+--- a/src/cmd/ld/data.c	Tue Aug 13 17:21:33 2013 +0400
++++ b/src/cmd/ld/data.c	Tue Aug 13 17:50:31 2013 +0200
 @@ -184,6 +184,8 @@
  		case D_TLS:
  			r->done = 0;
@@ -136,9 +136,9 @@ diff -r 6294f3ca30e1 src/cmd/ld/data.c
  			break;
  		case D_ADDR:
  			if(linkmode == LinkExternal && r->sym->type != SCONST) {
-diff -r 6294f3ca30e1 src/cmd/ld/lib.c
---- a/src/cmd/ld/lib.c	Tue Aug 06 16:48:19 2013 +1000
-+++ b/src/cmd/ld/lib.c	Tue Aug 06 12:02:10 2013 +0200
+diff -r 6824ab56b42c src/cmd/ld/lib.c
+--- a/src/cmd/ld/lib.c	Tue Aug 13 17:21:33 2013 +0400
++++ b/src/cmd/ld/lib.c	Tue Aug 13 17:50:31 2013 +0200
 @@ -308,7 +308,7 @@
  loadlib(void)
  {
@@ -161,9 +161,9 @@ diff -r 6294f3ca30e1 src/cmd/ld/lib.c
  	}
  	
  	// Now that we know the link mode, trim the dynexp list.
-diff -r 6294f3ca30e1 src/cmd/ld/symtab.c
---- a/src/cmd/ld/symtab.c	Tue Aug 06 16:48:19 2013 +1000
-+++ b/src/cmd/ld/symtab.c	Tue Aug 06 12:02:10 2013 +0200
+diff -r 6824ab56b42c src/cmd/ld/symtab.c
+--- a/src/cmd/ld/symtab.c	Tue Aug 13 17:21:33 2013 +0400
++++ b/src/cmd/ld/symtab.c	Tue Aug 13 17:50:31 2013 +0200
 @@ -181,22 +181,13 @@
  	genasmsym(putelfsym);
  	
@@ -189,10 +189,10 @@ diff -r 6294f3ca30e1 src/cmd/ld/symtab.c
  		s->elfsym = numelfsym++;
  	}
  
-diff -r 6294f3ca30e1 src/pkg/runtime/asm_arm.s
---- a/src/pkg/runtime/asm_arm.s	Tue Aug 06 16:48:19 2013 +1000
-+++ b/src/pkg/runtime/asm_arm.s	Tue Aug 06 12:02:10 2013 +0200
-@@ -34,10 +34,15 @@
+diff -r 6824ab56b42c src/pkg/runtime/asm_arm.s
+--- a/src/pkg/runtime/asm_arm.s	Tue Aug 13 17:21:33 2013 +0400
++++ b/src/pkg/runtime/asm_arm.s	Tue Aug 13 17:50:31 2013 +0200
+@@ -35,10 +35,15 @@
  	BL	runtime·emptyfunc(SB)	// fault if stack check is wrong
  
  	// if there is an _cgo_init, call it.
@@ -212,7 +212,7 @@ diff -r 6294f3ca30e1 src/pkg/runtime/asm_arm.s
  	// update stackguard after _cgo_init
  	MOVW	g_stackguard0(g), R0
  	MOVW	R0, g_stackguard(g)
-@@ -118,9 +123,9 @@
+@@ -119,9 +124,9 @@
  	MOVW	0(FP), R1		// gobuf
  	MOVW	gobuf_g(R1), g
  	MOVW	0(g), R2		// make sure g != nil
@@ -224,9 +224,9 @@ diff -r 6294f3ca30e1 src/pkg/runtime/asm_arm.s
  	MOVW	gobuf_sp(R1), SP	// restore SP
  	MOVW	gobuf_lr(R1), LR
  	MOVW	gobuf_ret(R1), R0
-@@ -436,9 +441,9 @@
+@@ -437,9 +442,9 @@
  // See cgocall.c for more details.
- TEXT	runtime·cgocallback_gofunc(SB),7,$8-12
+ TEXT	runtime·cgocallback_gofunc(SB),NOSPLIT,$8-12
  	// Load m and g from thread-local storage.
 -	MOVW	_cgo_load_gm(SB), R0
 +	MOVB	runtime·iscgo(SB), R0
@@ -236,7 +236,7 @@ diff -r 6294f3ca30e1 src/pkg/runtime/asm_arm.s
  
  	// If m is nil, Go did not create the current thread.
  	// Call needm to obtain one for temporary use.
-@@ -518,9 +523,9 @@
+@@ -519,9 +524,9 @@
  	MOVW	gg+4(FP), g
  
  	// Save m and g to thread-local storage.
@@ -248,7 +248,7 @@ diff -r 6294f3ca30e1 src/pkg/runtime/asm_arm.s
  
  	RET
  
-@@ -614,6 +619,34 @@
+@@ -615,6 +620,34 @@
  	MOVW	$0, R0
  	RET
  
@@ -261,32 +261,32 @@ diff -r 6294f3ca30e1 src/pkg/runtime/asm_arm.s
 +// two can be called from 5c ABI code.
 +
 +// g (R10) at 8(TP), m (R9) at 12(TP)
-+TEXT runtime·save_gm(SB),7,$0
++TEXT runtime·save_gm(SB),NOSPLIT,$0
 +	MRC		15, 0, R0, C13, C0, 3 // Fetch TLS register
 +	MOVW	g, 8(R0)
 +	MOVW	m, 12(R0)
 +	RET
 +
-+TEXT runtime·load_gm(SB),7,$0
++TEXT runtime·load_gm(SB),NOSPLIT,$0
 +	MRC		15, 0, R0, C13, C0, 3 // Fetch TLS register
 +	MOVW	8(R0), g
 +	MOVW	12(R0), m
 +	RET
 +
 +// void setmg_gcc(M*, G*); set m and g called from gcc.
-+TEXT setmg_gcc<>(SB),7,$0
++TEXT setmg_gcc<>(SB),NOSPLIT,$0
 +	MOVW	R0, m
 +	MOVW	R1, g
 +	B		runtime·save_gm(SB)
 +
 +
  // TODO: share code with memeq?
- TEXT bytes·Equal(SB),7,$0
+ TEXT bytes·Equal(SB),NOSPLIT,$0
  	MOVW	a_len+4(FP), R1
-diff -r 6294f3ca30e1 src/pkg/runtime/cgo/asm_arm.s
---- a/src/pkg/runtime/cgo/asm_arm.s	Tue Aug 06 16:48:19 2013 +1000
-+++ b/src/pkg/runtime/cgo/asm_arm.s	Tue Aug 06 12:02:10 2013 +0200
-@@ -12,12 +12,11 @@
+diff -r 6824ab56b42c src/pkg/runtime/cgo/asm_arm.s
+--- a/src/pkg/runtime/cgo/asm_arm.s	Tue Aug 13 17:21:33 2013 +0400
++++ b/src/pkg/runtime/cgo/asm_arm.s	Tue Aug 13 17:50:31 2013 +0200
+@@ -14,12 +14,11 @@
  	 *  push 2 args for fn (R1 and R2).
  	 * Also note that at procedure entry in 5c/5g world, 4(R13) will be the
  	 *  first arg, so we must push another dummy reg (R0) for 0(R13).
@@ -301,8 +301,8 @@ diff -r 6294f3ca30e1 src/pkg/runtime/cgo/asm_arm.s
  	MOVW	PC, R14
  	MOVW	0(R13), PC
  	MOVM.IAW	(R13), [R0, R1, R2, R4, R5, R6, R7, R8, m, g, R11, R12, PC]
-diff -r 6294f3ca30e1 src/pkg/runtime/cgo/cgo_arm.c
---- a/src/pkg/runtime/cgo/cgo_arm.c	Tue Aug 06 16:48:19 2013 +1000
+diff -r 6824ab56b42c src/pkg/runtime/cgo/cgo_arm.c
+--- a/src/pkg/runtime/cgo/cgo_arm.c	Tue Aug 13 17:21:33 2013 +0400
 +++ /dev/null	Thu Jan 01 00:00:00 1970 +0000
 @@ -1,12 +0,0 @@
 -// Copyright 2013 The Go Authors.  All rights reserved.
@@ -317,9 +317,9 @@ diff -r 6294f3ca30e1 src/pkg/runtime/cgo/cgo_arm.c
 -extern void x_cgo_save_gm(void);
 -void (*_cgo_save_gm)(void) = x_cgo_save_gm;
 -
-diff -r 6294f3ca30e1 src/pkg/runtime/cgo/gcc_arm.S
---- a/src/pkg/runtime/cgo/gcc_arm.S	Tue Aug 06 16:48:19 2013 +1000
-+++ b/src/pkg/runtime/cgo/gcc_arm.S	Tue Aug 06 12:02:10 2013 +0200
+diff -r 6824ab56b42c src/pkg/runtime/cgo/gcc_arm.S
+--- a/src/pkg/runtime/cgo/gcc_arm.S	Tue Aug 13 17:21:33 2013 +0400
++++ b/src/pkg/runtime/cgo/gcc_arm.S	Tue Aug 13 17:50:31 2013 +0200
 @@ -21,12 +21,8 @@
  .globl EXT(crosscall_arm2)
  EXT(crosscall_arm2):
@@ -334,9 +334,9 @@ diff -r 6294f3ca30e1 src/pkg/runtime/cgo/gcc_arm.S
  	pop {r4, r5, r6, r7, r8, r9, r10, r11, ip, pc}
  
  .globl EXT(__stack_chk_fail_local)
-diff -r 6294f3ca30e1 src/pkg/runtime/cgo/gcc_freebsd_arm.c
---- a/src/pkg/runtime/cgo/gcc_freebsd_arm.c	Tue Aug 06 16:48:19 2013 +1000
-+++ b/src/pkg/runtime/cgo/gcc_freebsd_arm.c	Tue Aug 06 12:02:10 2013 +0200
+diff -r 6824ab56b42c src/pkg/runtime/cgo/gcc_freebsd_arm.c
+--- a/src/pkg/runtime/cgo/gcc_freebsd_arm.c	Tue Aug 13 17:21:33 2013 +0400
++++ b/src/pkg/runtime/cgo/gcc_freebsd_arm.c	Tue Aug 13 17:50:31 2013 +0200
 @@ -8,72 +8,26 @@
  #include <string.h>
  #include "libcgo.h"
@@ -428,9 +428,9 @@ diff -r 6294f3ca30e1 src/pkg/runtime/cgo/gcc_freebsd_arm.c
 +	crosscall_arm2(ts.fn);
  	return nil;
  }
-diff -r 6294f3ca30e1 src/pkg/runtime/cgo/gcc_linux_arm.c
---- a/src/pkg/runtime/cgo/gcc_linux_arm.c	Tue Aug 06 16:48:19 2013 +1000
-+++ b/src/pkg/runtime/cgo/gcc_linux_arm.c	Tue Aug 06 12:02:10 2013 +0200
+diff -r 6824ab56b42c src/pkg/runtime/cgo/gcc_linux_arm.c
+--- a/src/pkg/runtime/cgo/gcc_linux_arm.c	Tue Aug 13 17:21:33 2013 +0400
++++ b/src/pkg/runtime/cgo/gcc_linux_arm.c	Tue Aug 13 17:50:31 2013 +0200
 @@ -8,60 +8,15 @@
  
  static void *threadentry(void*);
@@ -514,9 +514,9 @@ diff -r 6294f3ca30e1 src/pkg/runtime/cgo/gcc_linux_arm.c
 +	crosscall_arm2(ts.fn);
  	return nil;
  }
-diff -r 6294f3ca30e1 src/pkg/runtime/cgo/gcc_netbsd_arm.c
---- a/src/pkg/runtime/cgo/gcc_netbsd_arm.c	Tue Aug 06 16:48:19 2013 +1000
-+++ b/src/pkg/runtime/cgo/gcc_netbsd_arm.c	Tue Aug 06 12:02:10 2013 +0200
+diff -r 6824ab56b42c src/pkg/runtime/cgo/gcc_netbsd_arm.c
+--- a/src/pkg/runtime/cgo/gcc_netbsd_arm.c	Tue Aug 13 17:21:33 2013 +0400
++++ b/src/pkg/runtime/cgo/gcc_netbsd_arm.c	Tue Aug 13 17:50:31 2013 +0200
 @@ -10,64 +10,15 @@
  
  static void *threadentry(void*);
@@ -595,10 +595,10 @@ diff -r 6294f3ca30e1 src/pkg/runtime/cgo/gcc_netbsd_arm.c
 +	crosscall_arm2(ts.fn);
  	return nil;
  }
-diff -r 6294f3ca30e1 src/pkg/runtime/cgocall.c
---- a/src/pkg/runtime/cgocall.c	Tue Aug 06 16:48:19 2013 +1000
-+++ b/src/pkg/runtime/cgocall.c	Tue Aug 06 12:02:10 2013 +0200
-@@ -86,11 +86,6 @@
+diff -r 6824ab56b42c src/pkg/runtime/cgocall.c
+--- a/src/pkg/runtime/cgocall.c	Tue Aug 13 17:21:33 2013 +0400
++++ b/src/pkg/runtime/cgocall.c	Tue Aug 13 17:50:31 2013 +0200
+@@ -87,11 +87,6 @@
  void *_cgo_init;	/* filled in by dynamic linker when Cgo is available */
  static int64 cgosync;  /* represents possible synchronization in C code */
  
@@ -610,22 +610,22 @@ diff -r 6294f3ca30e1 src/pkg/runtime/cgocall.c
  static void unwindm(void);
  
  // Call from Go to C.
-diff -r 6294f3ca30e1 src/pkg/runtime/sys_freebsd_arm.s
---- a/src/pkg/runtime/sys_freebsd_arm.s	Tue Aug 06 16:48:19 2013 +1000
-+++ b/src/pkg/runtime/sys_freebsd_arm.s	Tue Aug 06 12:02:10 2013 +0200
-@@ -281,3 +281,7 @@
+diff -r 6824ab56b42c src/pkg/runtime/sys_freebsd_arm.s
+--- a/src/pkg/runtime/sys_freebsd_arm.s	Tue Aug 13 17:21:33 2013 +0400
++++ b/src/pkg/runtime/sys_freebsd_arm.s	Tue Aug 13 17:50:31 2013 +0200
+@@ -282,3 +282,7 @@
  //		return 0;
- TEXT runtime·cas(SB),7,$0
+ TEXT runtime·cas(SB),NOSPLIT,$0
  	B runtime·armcas(SB)
 +
-+TEXT runtime·read_tls_fallback(SB),7,$-4
++TEXT runtime·read_tls_fallback(SB),NOSPLIT,$-4
 +	MOVW $0xffff1000, R0
 +	MOVW (R0), R0
-diff -r 6294f3ca30e1 src/pkg/runtime/sys_linux_arm.s
---- a/src/pkg/runtime/sys_linux_arm.s	Tue Aug 06 16:48:19 2013 +1000
-+++ b/src/pkg/runtime/sys_linux_arm.s	Tue Aug 06 12:02:10 2013 +0200
-@@ -285,11 +285,11 @@
- TEXT runtime·sigtramp(SB),7,$24
+diff -r 6824ab56b42c src/pkg/runtime/sys_linux_arm.s
+--- a/src/pkg/runtime/sys_linux_arm.s	Tue Aug 13 17:21:33 2013 +0400
++++ b/src/pkg/runtime/sys_linux_arm.s	Tue Aug 13 17:50:31 2013 +0200
+@@ -286,11 +286,11 @@
+ TEXT runtime·sigtramp(SB),NOSPLIT,$24
  	// this might be called in external code context,
  	// where g and m are not set.
 -	// first save R0, because _cgo_load_gm will clobber it
@@ -639,24 +639,24 @@ diff -r 6294f3ca30e1 src/pkg/runtime/sys_linux_arm.s
  
  	CMP 	$0, m
  	BNE 	4(PC)
-@@ -440,3 +440,8 @@
+@@ -441,3 +441,8 @@
  	MOVW	$SYS_fcntl, R7
- 	SWI $0
+ 	SWI	$0
  	RET
 +
 +// b __kuser_get_tls @ 0xffff0fe0
-+TEXT runtime·read_tls_fallback(SB),7,$-4
++TEXT runtime·read_tls_fallback(SB),NOSPLIT,$-4
 +	MOVW	$0xffff0fe0, R0
 +	B	(R0)
-diff -r 6294f3ca30e1 src/pkg/runtime/sys_netbsd_arm.s
---- a/src/pkg/runtime/sys_netbsd_arm.s	Tue Aug 06 16:48:19 2013 +1000
-+++ b/src/pkg/runtime/sys_netbsd_arm.s	Tue Aug 06 12:02:10 2013 +0200
-@@ -300,3 +300,9 @@
+diff -r 6824ab56b42c src/pkg/runtime/sys_netbsd_arm.s
+--- a/src/pkg/runtime/sys_netbsd_arm.s	Tue Aug 13 17:21:33 2013 +0400
++++ b/src/pkg/runtime/sys_netbsd_arm.s	Tue Aug 13 17:50:31 2013 +0200
+@@ -301,3 +301,9 @@
  //		return 0;
- TEXT runtime·cas(SB),7,$0
+ TEXT runtime·cas(SB),NOSPLIT,$0
  	B runtime·armcas(SB)
 +
-+TEXT runtime·read_tls_fallback(SB),7,$-4
++TEXT runtime·read_tls_fallback(SB),NOSPLIT,$-4
 +	MOVM.WP [R1, R2, R3, R12], (R13)
 +	SWI $0x00a0013c // _lwp_getprivate
 +	MOVM.IAW    (R13), [R1, R2, R3, R12]

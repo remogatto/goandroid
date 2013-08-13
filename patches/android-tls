@@ -1,10 +1,10 @@
 # HG changeset patch
-# Parent 9dc377d326c1a17cedcdfdedf06e449dfa5c8673
+# Parent 4ca1bf670de5268db946674716e87bdb65a5de4f
 
-diff -r 9dc377d326c1 src/cmd/5l/asm.c
---- a/src/cmd/5l/asm.c	Sat Jun 29 10:52:02 2013 +0200
-+++ b/src/cmd/5l/asm.c	Sat Jun 29 17:27:01 2013 +0200
-@@ -954,7 +954,7 @@
+diff -r 4ca1bf670de5 src/cmd/5l/asm.c
+--- a/src/cmd/5l/asm.c	Tue Aug 13 17:12:09 2013 +0200
++++ b/src/cmd/5l/asm.c	Tue Aug 13 17:38:47 2013 +0200
+@@ -961,7 +961,7 @@
  			rel->siz = 4;
  			rel->sym = p->to.sym;
  			rel->add = p->to.offset;
@@ -13,10 +13,10 @@ diff -r 9dc377d326c1 src/cmd/5l/asm.c
  				rel->type = D_TLS;
  				if(flag_shared)
  					rel->add += pc - p->pcrel->pc - 8 - rel->siz;
-diff -r 9dc377d326c1 src/cmd/5l/l.h
---- a/src/cmd/5l/l.h	Sat Jun 29 10:52:02 2013 +0200
-+++ b/src/cmd/5l/l.h	Sat Jun 29 17:27:01 2013 +0200
-@@ -326,6 +326,7 @@
+diff -r 4ca1bf670de5 src/cmd/5l/l.h
+--- a/src/cmd/5l/l.h	Tue Aug 13 17:12:09 2013 +0200
++++ b/src/cmd/5l/l.h	Tue Aug 13 17:38:47 2013 +0200
+@@ -324,6 +324,7 @@
  EXTERN	int	goarm;
  EXTERN	Sym*	adrgotype;	// type symbol on last Adr read
  EXTERN	Sym*	fromgotype;	// type symbol on last p->from read
@@ -24,9 +24,9 @@ diff -r 9dc377d326c1 src/cmd/5l/l.h
  
  extern	char*	anames[];
  extern	Optab	optab[];
-diff -r 9dc377d326c1 src/cmd/5l/obj.c
---- a/src/cmd/5l/obj.c	Sat Jun 29 10:52:02 2013 +0200
-+++ b/src/cmd/5l/obj.c	Sat Jun 29 17:27:01 2013 +0200
+diff -r 4ca1bf670de5 src/cmd/5l/obj.c
+--- a/src/cmd/5l/obj.c	Tue Aug 13 17:12:09 2013 +0200
++++ b/src/cmd/5l/obj.c	Tue Aug 13 17:38:47 2013 +0200
 @@ -93,6 +93,7 @@
  		debug['F'] = 1;
  
@@ -48,9 +48,9 @@ diff -r 9dc377d326c1 src/cmd/5l/obj.c
  
  	// mark some functions that are only referenced after linker code editing
  	if(debug['F'])
-diff -r 9dc377d326c1 src/cmd/ld/symtab.c
---- a/src/cmd/ld/symtab.c	Sat Jun 29 10:52:02 2013 +0200
-+++ b/src/cmd/ld/symtab.c	Sat Jun 29 17:27:01 2013 +0200
+diff -r 4ca1bf670de5 src/cmd/ld/symtab.c
+--- a/src/cmd/ld/symtab.c	Tue Aug 13 17:12:09 2013 +0200
++++ b/src/cmd/ld/symtab.c	Tue Aug 13 17:38:47 2013 +0200
 @@ -182,13 +182,15 @@
  	
  	if(linkmode == LinkExternal && HEADTYPE != Hopenbsd) {
@@ -73,9 +73,9 @@ diff -r 9dc377d326c1 src/cmd/ld/symtab.c
  	}
  
  	elfbind = STB_GLOBAL;
-diff -r 9dc377d326c1 src/pkg/runtime/cgo/cgo_android_arm.c
+diff -r 4ca1bf670de5 src/pkg/runtime/cgo/cgo_android_arm.c
 --- /dev/null	Thu Jan 01 00:00:00 1970 +0000
-+++ b/src/pkg/runtime/cgo/cgo_android_arm.c	Sat Jun 29 17:27:01 2013 +0200
++++ b/src/pkg/runtime/cgo/cgo_android_arm.c	Tue Aug 13 17:38:47 2013 +0200
 @@ -0,0 +1,12 @@
 +// Copyright 2013 The Go Authors.  All rights reserved.
 +// Use of this source code is governed by a BSD-style
@@ -89,9 +89,9 @@ diff -r 9dc377d326c1 src/pkg/runtime/cgo/cgo_android_arm.c
 +extern void x_cgo_tls_setup(void (*)(void*));
 +void (*_cgo_tls_setup)(void (*)(void*)) = x_cgo_tls_setup;
 +
-diff -r 9dc377d326c1 src/pkg/runtime/cgo/gcc_android_arm.c
+diff -r 4ca1bf670de5 src/pkg/runtime/cgo/gcc_android_arm.c
 --- /dev/null	Thu Jan 01 00:00:00 1970 +0000
-+++ b/src/pkg/runtime/cgo/gcc_android_arm.c	Sat Jun 29 17:27:01 2013 +0200
++++ b/src/pkg/runtime/cgo/gcc_android_arm.c	Tue Aug 13 17:38:47 2013 +0200
 @@ -0,0 +1,88 @@
 +// Copyright 2009 The Go Authors.  All rights reserved.
 +// Use of this source code is governed by a BSD-style
@@ -181,13 +181,13 @@ diff -r 9dc377d326c1 src/pkg/runtime/cgo/gcc_android_arm.c
 +	for(i=0; i<ntofree; i++)
 +		pthread_key_delete(tofree[i]);
 +}
-diff -r 9dc377d326c1 src/pkg/runtime/rt0_linux_arm.s
---- a/src/pkg/runtime/rt0_linux_arm.s	Sat Jun 29 10:52:02 2013 +0200
-+++ b/src/pkg/runtime/rt0_linux_arm.s	Sat Jun 29 17:27:01 2013 +0200
-@@ -84,6 +84,12 @@
+diff -r 4ca1bf670de5 src/pkg/runtime/rt0_linux_arm.s
+--- a/src/pkg/runtime/rt0_linux_arm.s	Tue Aug 13 17:12:09 2013 +0200
++++ b/src/pkg/runtime/rt0_linux_arm.s	Tue Aug 13 17:38:47 2013 +0200
+@@ -86,6 +86,12 @@
  	B		(R4)
  
- TEXT _rt0_arm_linux_lib(SB),7,$0
+ TEXT _rt0_arm_linux_lib(SB),NOSPLIT,$0
 +	MRC		15, 0, R1, C13, C0, 3 // Fetch TLS register
 +	MOVW	_cgo_tls_setup(SB), R3
 +	CMP		$0, R3
@@ -197,10 +197,10 @@ diff -r 9dc377d326c1 src/pkg/runtime/rt0_linux_arm.s
  	MOVW    $_rt0_arm_linux1(SB), R0
  	MOVW    _cgo_lib_setup(SB), R3
  	BL		(R3)
-diff -r 9dc377d326c1 src/pkg/runtime/runtime.c
---- a/src/pkg/runtime/runtime.c	Sat Jun 29 10:52:02 2013 +0200
-+++ b/src/pkg/runtime/runtime.c	Sat Jun 29 17:27:01 2013 +0200
-@@ -76,6 +76,7 @@
+diff -r 4ca1bf670de5 src/pkg/runtime/runtime.c
+--- a/src/pkg/runtime/runtime.c	Tue Aug 13 17:12:09 2013 +0200
++++ b/src/pkg/runtime/runtime.c	Tue Aug 13 17:38:47 2013 +0200
+@@ -77,6 +77,7 @@
  
  void (*runtime·sysargs)(int32, uint8**);
  uint8** (*_cgo_getenviron)(void);
