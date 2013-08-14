@@ -1,5 +1,5 @@
 # HG changeset patch
-# Parent ff2493bf1074926f9e4fd4624e7d96ea407586fb
+# Parent 3833ddddde2b1a2741a396c4e965b04d525a133b
 
 diff --git a/misc/cgo/testshared/main.c b/misc/cgo/testshared/main.c
 new file mode 100644
@@ -224,6 +224,18 @@ new file mode 100755
 +	exit 1;
 +fi
 +rm -rf $dylib $dylib2 mainmult main mainadv *.dSYM
+diff --git a/src/cmd/cgo/out.go b/src/cmd/cgo/out.go
+--- a/src/cmd/cgo/out.go
++++ b/src/cmd/cgo/out.go
+@@ -494,7 +494,7 @@
+ 
+ 	// Gcc wrapper unpacks the C argument struct
+ 	// and calls the actual C function.
+-	fmt.Fprintf(fgcc, "void\n")
++	fmt.Fprintf(fgcc, "__attribute__ ((visibility (\"hidden\"))) void\n")
+ 	fmt.Fprintf(fgcc, "_cgo%s%s(void *v)\n", cPrefix, n.Mangle)
+ 	fmt.Fprintf(fgcc, "{\n")
+ 	if n.AddError {
 diff --git a/src/pkg/runtime/asm_386.s b/src/pkg/runtime/asm_386.s
 --- a/src/pkg/runtime/asm_386.s
 +++ b/src/pkg/runtime/asm_386.s
@@ -717,7 +729,7 @@ diff --git a/src/pkg/runtime/runtime.c b/src/pkg/runtime/runtime.c
 diff --git a/src/pkg/runtime/runtime.h b/src/pkg/runtime/runtime.h
 --- a/src/pkg/runtime/runtime.h
 +++ b/src/pkg/runtime/runtime.h
-@@ -704,6 +704,7 @@
+@@ -708,6 +708,7 @@
  extern	int8*	runtime·goos;
  extern	int32	runtime·ncpu;
  extern	bool	runtime·iscgo;
