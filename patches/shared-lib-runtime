@@ -1,5 +1,5 @@
 # HG changeset patch
-# Parent 3833ddddde2b1a2741a396c4e965b04d525a133b
+# Parent a21eec46edee7c50d4352257e7930a0cbf35eed8
 
 diff --git a/misc/cgo/testshared/main.c b/misc/cgo/testshared/main.c
 new file mode 100644
@@ -602,15 +602,15 @@ diff --git a/src/pkg/runtime/os_linux_arm.c b/src/pkg/runtime/os_linux_arm.c
 diff --git a/src/pkg/runtime/proc.c b/src/pkg/runtime/proc.c
 --- a/src/pkg/runtime/proc.c
 +++ b/src/pkg/runtime/proc.c
-@@ -63,6 +63,7 @@
+@@ -65,6 +65,7 @@
  int32	runtime·gomaxprocs;
  uint32	runtime·needextram;
  bool	runtime·iscgo;
 +uint8	runtime·islibrary; // set by 5l in shared library mode
- uint32	runtime·gcwaiting;
  M	runtime·m0;
  G	runtime·g0;	 // idle goroutine for m0
-@@ -163,6 +164,17 @@
+ G*	runtime·allg;
+@@ -166,6 +167,17 @@
  
  static FuncVal initDone = { runtime·unlockOSThread };
  
@@ -628,7 +628,7 @@ diff --git a/src/pkg/runtime/proc.c b/src/pkg/runtime/proc.c
  // The main goroutine.
  void
  runtime·main(void)
-@@ -199,6 +211,15 @@
+@@ -210,6 +222,15 @@
  	runtime·unlockOSThread();
  
  	main·main();
@@ -644,7 +644,7 @@ diff --git a/src/pkg/runtime/proc.c b/src/pkg/runtime/proc.c
  	if(raceenabled)
  		runtime·racefini();
  
-@@ -673,11 +694,15 @@
+@@ -694,11 +715,15 @@
  	M *mp;
  
  	if(runtime·needextram) {
