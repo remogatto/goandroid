@@ -1,10 +1,10 @@
 # HG changeset patch
-# Parent 67685783ac535147bb6a9644ca40ac7426029828
+# Parent 7eb9c926fad6574871b85bce97a4461a74cb0095
 
-diff -r 67685783ac53 src/cmd/go/build.go
---- a/src/cmd/go/build.go	Fri Jul 05 14:55:19 2013 +0200
-+++ b/src/cmd/go/build.go	Fri Jul 05 15:07:05 2013 +0200
-@@ -1807,7 +1807,19 @@
+diff -r 7eb9c926fad6 src/cmd/go/build.go
+--- a/src/cmd/go/build.go	Mon Sep 02 11:51:33 2013 +0200
++++ b/src/cmd/go/build.go	Mon Sep 02 11:57:30 2013 +0200
+@@ -1808,7 +1808,19 @@
  		case "windows":
  			a = append(a, "-mthreads")
  		default:
@@ -25,7 +25,7 @@ diff -r 67685783ac53 src/cmd/go/build.go
  		}
  	}
  
-@@ -1852,10 +1864,6 @@
+@@ -1855,10 +1867,6 @@
  )
  
  func (b *builder) cgo(p *Package, cgoExe, obj string, gccfiles []string, gxxfiles []string) (outGo, outObj []string, err error) {
@@ -36,9 +36,9 @@ diff -r 67685783ac53 src/cmd/go/build.go
  	cgoCPPFLAGS := stringList(envList("CGO_CPPFLAGS"), p.CgoCPPFLAGS)
  	cgoCFLAGS := stringList(envList("CGO_CFLAGS"), p.CgoCFLAGS)
  	cgoCXXFLAGS := stringList(envList("CGO_CXXFLAGS"), p.CgoCXXFLAGS)
-diff -r 67685783ac53 src/pkg/os/file_android.go
+diff -r 7eb9c926fad6 src/pkg/os/file_android.go
 --- /dev/null	Thu Jan 01 00:00:00 1970 +0000
-+++ b/src/pkg/os/file_android.go	Fri Jul 05 15:07:05 2013 +0200
++++ b/src/pkg/os/file_android.go	Mon Sep 02 11:57:30 2013 +0200
 @@ -0,0 +1,16 @@
 +// Copyright 2012 The Go Authors. All rights reserved.
 +// Use of this source code is governed by a BSD-style
@@ -56,9 +56,9 @@ diff -r 67685783ac53 src/pkg/os/file_android.go
 +	}
 +	return dir
 +}
-diff -r 67685783ac53 src/pkg/os/file_non_android.go
+diff -r 7eb9c926fad6 src/pkg/os/file_non_android.go
 --- /dev/null	Thu Jan 01 00:00:00 1970 +0000
-+++ b/src/pkg/os/file_non_android.go	Fri Jul 05 15:07:05 2013 +0200
++++ b/src/pkg/os/file_non_android.go	Mon Sep 02 11:57:30 2013 +0200
 @@ -0,0 +1,16 @@
 +// Copyright 2012 The Go Authors. All rights reserved.
 +// Use of this source code is governed by a BSD-style
@@ -76,10 +76,10 @@ diff -r 67685783ac53 src/pkg/os/file_non_android.go
 +	}
 +	return dir
 +}
-diff -r 67685783ac53 src/pkg/os/file_unix.go
---- a/src/pkg/os/file_unix.go	Fri Jul 05 14:55:19 2013 +0200
-+++ b/src/pkg/os/file_unix.go	Fri Jul 05 15:07:05 2013 +0200
-@@ -273,12 +273,3 @@
+diff -r 7eb9c926fad6 src/pkg/os/file_unix.go
+--- a/src/pkg/os/file_unix.go	Mon Sep 02 11:51:33 2013 +0200
++++ b/src/pkg/os/file_unix.go	Mon Sep 02 11:57:30 2013 +0200
+@@ -281,12 +281,3 @@
  
  	return name
  }
@@ -92,21 +92,21 @@ diff -r 67685783ac53 src/pkg/os/file_unix.go
 -	}
 -	return dir
 -}
-diff -r 67685783ac53 src/pkg/os/user/lookup_stubs.go
---- a/src/pkg/os/user/lookup_stubs.go	Fri Jul 05 14:55:19 2013 +0200
-+++ b/src/pkg/os/user/lookup_stubs.go	Fri Jul 05 15:07:05 2013 +0200
+diff -r 7eb9c926fad6 src/pkg/os/user/lookup_stubs.go
+--- a/src/pkg/os/user/lookup_stubs.go	Mon Sep 02 11:51:33 2013 +0200
++++ b/src/pkg/os/user/lookup_stubs.go	Mon Sep 02 11:57:30 2013 +0200
 @@ -2,7 +2,7 @@
  // Use of this source code is governed by a BSD-style
  // license that can be found in the LICENSE file.
  
--// +build !cgo,!windows
-+// +build !cgo,!windows android
+-// +build !cgo,!windows,!plan9
++// +build !cgo,!windows,!plan9 android
  
  package user
  
-diff -r 67685783ac53 src/pkg/os/user/lookup_unix.go
---- a/src/pkg/os/user/lookup_unix.go	Fri Jul 05 14:55:19 2013 +0200
-+++ b/src/pkg/os/user/lookup_unix.go	Fri Jul 05 15:07:05 2013 +0200
+diff -r 7eb9c926fad6 src/pkg/os/user/lookup_unix.go
+--- a/src/pkg/os/user/lookup_unix.go	Mon Sep 02 11:51:33 2013 +0200
++++ b/src/pkg/os/user/lookup_unix.go	Mon Sep 02 11:57:30 2013 +0200
 @@ -2,7 +2,7 @@
  // Use of this source code is governed by a BSD-style
  // license that can be found in the LICENSE file.
@@ -116,9 +116,9 @@ diff -r 67685783ac53 src/pkg/os/user/lookup_unix.go
  // +build cgo
  
  package user
-diff -r 67685783ac53 src/pkg/runtime/cgo/cgo.go
---- a/src/pkg/runtime/cgo/cgo.go	Fri Jul 05 14:55:19 2013 +0200
-+++ b/src/pkg/runtime/cgo/cgo.go	Fri Jul 05 15:07:05 2013 +0200
+diff -r 7eb9c926fad6 src/pkg/runtime/cgo/cgo.go
+--- a/src/pkg/runtime/cgo/cgo.go	Mon Sep 02 11:51:33 2013 +0200
++++ b/src/pkg/runtime/cgo/cgo.go	Mon Sep 02 11:57:30 2013 +0200
 @@ -9,18 +9,6 @@
  */
  package cgo
@@ -138,9 +138,9 @@ diff -r 67685783ac53 src/pkg/runtime/cgo/cgo.go
  import "C"
  
  // Supports _cgo_panic by converting a string constant to an empty
-diff -r 67685783ac53 src/pkg/runtime/cgo/cgo_flags.go
+diff -r 7eb9c926fad6 src/pkg/runtime/cgo/cgo_flags.go
 --- /dev/null	Thu Jan 01 00:00:00 1970 +0000
-+++ b/src/pkg/runtime/cgo/cgo_flags.go	Fri Jul 05 15:07:05 2013 +0200
++++ b/src/pkg/runtime/cgo/cgo_flags.go	Mon Sep 02 11:57:30 2013 +0200
 @@ -0,0 +1,16 @@
 +// Copyright 2012 The Go Authors.  All rights reserved.
 +// Use of this source code is governed by a BSD-style
@@ -158,10 +158,10 @@ diff -r 67685783ac53 src/pkg/runtime/cgo/cgo_flags.go
 +#cgo windows LDFLAGS: -lm -mthreads
 +*/
 +import "C"
-diff -r 67685783ac53 src/pkg/runtime/malloc.goc
---- a/src/pkg/runtime/malloc.goc	Fri Jul 05 14:55:19 2013 +0200
-+++ b/src/pkg/runtime/malloc.goc	Fri Jul 05 15:07:05 2013 +0200
-@@ -293,7 +293,7 @@
+diff -r 7eb9c926fad6 src/pkg/runtime/malloc.goc
+--- a/src/pkg/runtime/malloc.goc	Mon Sep 02 11:51:33 2013 +0200
++++ b/src/pkg/runtime/malloc.goc	Mon Sep 02 11:57:30 2013 +0200
+@@ -318,7 +318,7 @@
  
  uintptr runtime·sizeof_C_MStats = sizeof(MStats);
  
