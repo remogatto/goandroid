@@ -1,10 +1,10 @@
 # HG changeset patch
-# Parent 7eb9c926fad6574871b85bce97a4461a74cb0095
+# Parent 885d86446b1fee0b26a11b928f2e407b4acb1645
 
-diff -r 7eb9c926fad6 src/cmd/go/build.go
---- a/src/cmd/go/build.go	Mon Sep 02 11:51:33 2013 +0200
-+++ b/src/cmd/go/build.go	Mon Sep 02 11:57:30 2013 +0200
-@@ -1808,7 +1808,19 @@
+diff -r 885d86446b1f src/cmd/go/build.go
+--- a/src/cmd/go/build.go	Wed Sep 11 22:42:53 2013 +0200
++++ b/src/cmd/go/build.go	Wed Sep 11 22:50:28 2013 +0200
+@@ -1866,7 +1866,19 @@
  		case "windows":
  			a = append(a, "-mthreads")
  		default:
@@ -25,7 +25,7 @@ diff -r 7eb9c926fad6 src/cmd/go/build.go
  		}
  	}
  
-@@ -1855,10 +1867,6 @@
+@@ -1913,10 +1925,6 @@
  )
  
  func (b *builder) cgo(p *Package, cgoExe, obj string, gccfiles []string, gxxfiles []string) (outGo, outObj []string, err error) {
@@ -36,9 +36,9 @@ diff -r 7eb9c926fad6 src/cmd/go/build.go
  	cgoCPPFLAGS := stringList(envList("CGO_CPPFLAGS"), p.CgoCPPFLAGS)
  	cgoCFLAGS := stringList(envList("CGO_CFLAGS"), p.CgoCFLAGS)
  	cgoCXXFLAGS := stringList(envList("CGO_CXXFLAGS"), p.CgoCXXFLAGS)
-diff -r 7eb9c926fad6 src/pkg/os/file_android.go
+diff -r 885d86446b1f src/pkg/os/file_android.go
 --- /dev/null	Thu Jan 01 00:00:00 1970 +0000
-+++ b/src/pkg/os/file_android.go	Mon Sep 02 11:57:30 2013 +0200
++++ b/src/pkg/os/file_android.go	Wed Sep 11 22:50:28 2013 +0200
 @@ -0,0 +1,16 @@
 +// Copyright 2012 The Go Authors. All rights reserved.
 +// Use of this source code is governed by a BSD-style
@@ -56,9 +56,9 @@ diff -r 7eb9c926fad6 src/pkg/os/file_android.go
 +	}
 +	return dir
 +}
-diff -r 7eb9c926fad6 src/pkg/os/file_non_android.go
+diff -r 885d86446b1f src/pkg/os/file_non_android.go
 --- /dev/null	Thu Jan 01 00:00:00 1970 +0000
-+++ b/src/pkg/os/file_non_android.go	Mon Sep 02 11:57:30 2013 +0200
++++ b/src/pkg/os/file_non_android.go	Wed Sep 11 22:50:28 2013 +0200
 @@ -0,0 +1,16 @@
 +// Copyright 2012 The Go Authors. All rights reserved.
 +// Use of this source code is governed by a BSD-style
@@ -76,9 +76,9 @@ diff -r 7eb9c926fad6 src/pkg/os/file_non_android.go
 +	}
 +	return dir
 +}
-diff -r 7eb9c926fad6 src/pkg/os/file_unix.go
---- a/src/pkg/os/file_unix.go	Mon Sep 02 11:51:33 2013 +0200
-+++ b/src/pkg/os/file_unix.go	Mon Sep 02 11:57:30 2013 +0200
+diff -r 885d86446b1f src/pkg/os/file_unix.go
+--- a/src/pkg/os/file_unix.go	Wed Sep 11 22:42:53 2013 +0200
++++ b/src/pkg/os/file_unix.go	Wed Sep 11 22:50:28 2013 +0200
 @@ -281,12 +281,3 @@
  
  	return name
@@ -92,9 +92,9 @@ diff -r 7eb9c926fad6 src/pkg/os/file_unix.go
 -	}
 -	return dir
 -}
-diff -r 7eb9c926fad6 src/pkg/os/user/lookup_stubs.go
---- a/src/pkg/os/user/lookup_stubs.go	Mon Sep 02 11:51:33 2013 +0200
-+++ b/src/pkg/os/user/lookup_stubs.go	Mon Sep 02 11:57:30 2013 +0200
+diff -r 885d86446b1f src/pkg/os/user/lookup_stubs.go
+--- a/src/pkg/os/user/lookup_stubs.go	Wed Sep 11 22:42:53 2013 +0200
++++ b/src/pkg/os/user/lookup_stubs.go	Wed Sep 11 22:50:28 2013 +0200
 @@ -2,7 +2,7 @@
  // Use of this source code is governed by a BSD-style
  // license that can be found in the LICENSE file.
@@ -104,28 +104,29 @@ diff -r 7eb9c926fad6 src/pkg/os/user/lookup_stubs.go
  
  package user
  
-diff -r 7eb9c926fad6 src/pkg/os/user/lookup_unix.go
---- a/src/pkg/os/user/lookup_unix.go	Mon Sep 02 11:51:33 2013 +0200
-+++ b/src/pkg/os/user/lookup_unix.go	Mon Sep 02 11:57:30 2013 +0200
+diff -r 885d86446b1f src/pkg/os/user/lookup_unix.go
+--- a/src/pkg/os/user/lookup_unix.go	Wed Sep 11 22:42:53 2013 +0200
++++ b/src/pkg/os/user/lookup_unix.go	Wed Sep 11 22:50:28 2013 +0200
 @@ -2,7 +2,7 @@
  // Use of this source code is governed by a BSD-style
  // license that can be found in the LICENSE file.
  
--// +build darwin freebsd linux netbsd openbsd
-+// +build darwin freebsd !android,linux netbsd openbsd
+-// +build darwin dragonfly freebsd linux netbsd openbsd
++// +build darwin dragonfly freebsd !android,linux netbsd openbsd
  // +build cgo
  
  package user
-diff -r 7eb9c926fad6 src/pkg/runtime/cgo/cgo.go
---- a/src/pkg/runtime/cgo/cgo.go	Mon Sep 02 11:51:33 2013 +0200
-+++ b/src/pkg/runtime/cgo/cgo.go	Mon Sep 02 11:57:30 2013 +0200
-@@ -9,18 +9,6 @@
+diff -r 885d86446b1f src/pkg/runtime/cgo/cgo.go
+--- a/src/pkg/runtime/cgo/cgo.go	Wed Sep 11 22:42:53 2013 +0200
++++ b/src/pkg/runtime/cgo/cgo.go	Wed Sep 11 22:50:28 2013 +0200
+@@ -9,19 +9,6 @@
  */
  package cgo
  
 -/*
 -
 -#cgo darwin LDFLAGS: -lpthread
+-#cgo dragonfly LDFLAGS: -lpthread
 -#cgo freebsd LDFLAGS: -lpthread
 -#cgo linux LDFLAGS: -lpthread
 -#cgo netbsd LDFLAGS: -lpthread
@@ -138,9 +139,9 @@ diff -r 7eb9c926fad6 src/pkg/runtime/cgo/cgo.go
  import "C"
  
  // Supports _cgo_panic by converting a string constant to an empty
-diff -r 7eb9c926fad6 src/pkg/runtime/cgo/cgo_flags.go
+diff -r 885d86446b1f src/pkg/runtime/cgo/cgo_flags.go
 --- /dev/null	Thu Jan 01 00:00:00 1970 +0000
-+++ b/src/pkg/runtime/cgo/cgo_flags.go	Mon Sep 02 11:57:30 2013 +0200
++++ b/src/pkg/runtime/cgo/cgo_flags.go	Wed Sep 11 22:50:28 2013 +0200
 @@ -0,0 +1,16 @@
 +// Copyright 2012 The Go Authors.  All rights reserved.
 +// Use of this source code is governed by a BSD-style
@@ -158,10 +159,10 @@ diff -r 7eb9c926fad6 src/pkg/runtime/cgo/cgo_flags.go
 +#cgo windows LDFLAGS: -lm -mthreads
 +*/
 +import "C"
-diff -r 7eb9c926fad6 src/pkg/runtime/malloc.goc
---- a/src/pkg/runtime/malloc.goc	Mon Sep 02 11:51:33 2013 +0200
-+++ b/src/pkg/runtime/malloc.goc	Mon Sep 02 11:57:30 2013 +0200
-@@ -318,7 +318,7 @@
+diff -r 885d86446b1f src/pkg/runtime/malloc.goc
+--- a/src/pkg/runtime/malloc.goc	Wed Sep 11 22:42:53 2013 +0200
++++ b/src/pkg/runtime/malloc.goc	Wed Sep 11 22:50:28 2013 +0200
+@@ -316,7 +316,7 @@
  
  uintptr runtime·sizeof_C_MStats = sizeof(MStats);
  
