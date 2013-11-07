@@ -6,10 +6,9 @@ package main
 // #include <jni.h>
 // #include <android/native_activity.h>
 // #include <android/input.h>
-// #include <EGL/egl.h>
 // #include "main.h"
 //
-// #cgo LDFLAGS: -landroid -lEGL
+// #cgo LDFLAGS: -landroid
 import "C"
 
 import (
@@ -18,6 +17,7 @@ import (
 	"runtime"
 	"runtime/debug"
 	"unsafe"
+	"github.com/remogatto/egl"
 )
 
 type mainLoop struct {
@@ -56,21 +56,21 @@ func (s *activityState) Destroy() {
 }
 
 type renderState struct {
-	disp C.EGLDisplay
-	conf C.EGLConfig
-	ctx  C.EGLContext
-	surf C.EGLSurface
+	disp egl.Display
+	conf egl.Config
+	ctx  egl.Context
+	surf egl.Surface
 }
 
 func (s *renderState) Destroy() {
 	if s == nil {
 		return
 	}
-	if s.disp != nil {
-		if s.ctx != nil {
-			C.eglDestroyContext(s.disp, s.ctx)
+	if s.disp != egl.Display(unsafe.Pointer(nil)) {
+		if s.ctx != egl.Context(unsafe.Pointer(nil)) {
+			egl.DestroyContext(s.disp, s.ctx)
 		}
-		C.eglTerminate(s.disp)
+		egl.Terminate(s.disp)
 	}
 }
 
@@ -133,8 +133,8 @@ func (m *mainLoop) loop(init chan<- struct{}) {
 	for {
 		select {
 		case <-m.quit:
-			if m.renderState != nil && m.renderState.ctx != nil {
-				if C.eglMakeCurrent(m.renderState.disp, C.EGLSurface(unsafe.Pointer(nil)), C.EGLSurface(unsafe.Pointer(nil)), C.EGLContext(unsafe.Pointer(nil))) != C.EGL_TRUE {
+			if m.renderState != nil && m.renderState.ctx != egl.Context(unsafe.Pointer(nil)) {
+				if !egl.MakeCurrent(m.renderState.disp, egl.Surface(unsafe.Pointer(nil)), egl.Surface(unsafe.Pointer(nil)), egl.Context(unsafe.Pointer(nil))) {
 					panic("Error: eglMakeCurrent() failed\n")
 				}
 			}
@@ -182,35 +182,35 @@ func (m *mainLoop) frame() {
 	}
 	if m.isRunning() {
 		m.checkSize()
-		createCtx := m.renderState.ctx == nil
+		createCtx := m.renderState.ctx == egl.Context(unsafe.Pointer(nil))
 		if createCtx {
 			log.Printf("Creating context\n")
-			ctx_attribs := [...]C.EGLint{
-				C.EGL_CONTEXT_CLIENT_VERSION, 2,
-				C.EGL_NONE,
+			ctx_attribs := [...]int32{
+				egl.CONTEXT_CLIENT_VERSION, 2,
+				egl.NONE,
 			}
 
-			m.renderState.ctx = C.eglCreateContext(m.renderState.disp, m.renderState.conf, C.EGLContext(unsafe.Pointer(nil)), (*C.EGLint)(unsafe.Pointer(&ctx_attribs[0])))
-			if m.renderState.ctx == nil {
+			m.renderState.ctx = egl.CreateContext(m.renderState.disp, m.renderState.conf, egl.NO_CONTEXT, &ctx_attribs[0])
+			if m.renderState.ctx == egl.Context(unsafe.Pointer(nil)) {
 				panic("Error: eglCreateContext failed\n")
 			}
 		}
 
-		if C.eglMakeCurrent(m.renderState.disp, m.renderState.surf, m.renderState.surf, m.renderState.ctx) != C.EGL_TRUE {
+		if !egl.MakeCurrent(m.renderState.disp, m.renderState.surf, m.renderState.surf, m.renderState.ctx) {
 			panic("Error: eglMakeCurrent() failed\n")
 		}
 		if createCtx {
 			m.game.initGL()
 		}
 		m.game.drawFrame()
-		C.eglSwapBuffers(m.renderState.disp, m.renderState.surf)
+		egl.SwapBuffers(m.renderState.disp, m.renderState.surf)
 	}
 }
 
 func (m *mainLoop) checkSize() {
-	var w, h C.EGLint
-	C.eglQuerySurface(m.renderState.disp, m.renderState.surf, C.EGL_WIDTH, &w)
-	C.eglQuerySurface(m.renderState.disp, m.renderState.surf, C.EGL_HEIGHT, &h)
+	var w, h int32
+	egl.QuerySurface(m.renderState.disp, m.renderState.surf, egl.WIDTH, &w)
+	egl.QuerySurface(m.renderState.disp, m.renderState.surf, egl.HEIGHT, &h)
 	width, height := int(w), int(h)
 	if width != m.width || height != m.height {
 		m.width = width
@@ -372,58 +372,58 @@ func onNativeWindowDestroyed(act *C.ANativeActivity, win unsafe.Pointer) {
 	log.Printf("onWindowDestroy...\n")
 	state := states[act]
 	state.mLoop.UpdateRenderState(nil)
-	C.eglDestroySurface(state.renderState.disp, state.renderState.surf)
-	state.renderState.surf = nil
+	egl.DestroySurface(state.renderState.disp, state.renderState.surf)
+	state.renderState.surf = egl.Surface(unsafe.Pointer(nil))
 	log.Printf("onWindowDestroy done\n")
 }
 
-func getEGLDisp(disp C.EGLNativeDisplayType) C.EGLDisplay {
-	if C.eglBindAPI(C.EGL_OPENGL_ES_API) == C.EGL_FALSE {
+func getEGLDisp(disp egl.NativeDisplayType) egl.Display {
+	if !egl.BindAPI(egl.OPENGL_ES_API) {
 		panic("Error: eglBindAPI() failed")
 	}
 
-	egl_dpy := C.eglGetDisplay((C.EGLNativeDisplayType)(disp))
-	if egl_dpy == nil {
+	egl_dpy := egl.GetDisplay((egl.NativeDisplayType)(disp))
+	if egl_dpy == egl.NO_DISPLAY {
 		panic("Error: eglGetDisplay() failed\n")
 	}
 
-	var egl_major, egl_minor C.EGLint
-	if C.eglInitialize(egl_dpy, &egl_major, &egl_minor) != C.EGL_TRUE {
+	var egl_major, egl_minor int32
+	if !egl.Initialize(egl_dpy, &egl_major, &egl_minor) {
 		panic("Error: eglInitialize() failed\n")
 	}
 	return egl_dpy
 }
 
-func EGLCreateWindowSurface(eglDisp C.EGLDisplay, config C.EGLConfig, win C.EGLNativeWindowType) C.EGLSurface {
-	eglSurf := C.eglCreateWindowSurface(eglDisp, config, win, (*C.EGLint)(unsafe.Pointer(nil)))
-	if eglSurf == nil {
+func EGLCreateWindowSurface(eglDisp egl.Display, config egl.Config, win egl.NativeWindowType) egl.Surface {
+	eglSurf := egl.CreateWindowSurface(eglDisp, config, win, nil)
+	if eglSurf == egl.NO_SURFACE {
 		panic("Error: eglCreateWindowSurface failed\n")
 	}
 	return eglSurf
 }
 
-func getEGLNativeVisualId(eglDisp C.EGLDisplay, config C.EGLConfig) C.EGLint {
-	var vid C.EGLint
-	if C.eglGetConfigAttrib(eglDisp, config, C.EGL_NATIVE_VISUAL_ID, &vid) != C.EGL_TRUE {
+func getEGLNativeVisualId(eglDisp egl.Display, config egl.Config) int32 {
+	var vid int32
+	if !egl.GetConfigAttrib(eglDisp, config, egl.NATIVE_VISUAL_ID, &vid) {
 		panic("Error: eglGetConfigAttrib() failed\n")
 	}
 	return vid
 }
 
-func chooseEGLConfig(eglDisp C.EGLDisplay) C.EGLConfig {
-	eglAttribs := [...]C.EGLint{
-		C.EGL_RED_SIZE, 4,
-		C.EGL_GREEN_SIZE, 4,
-		C.EGL_BLUE_SIZE, 4,
+func chooseEGLConfig(eglDisp egl.Display) egl.Config {
+	eglAttribs := []int32{
+		egl.RED_SIZE, 4,
+		egl.GREEN_SIZE, 4,
+		egl.BLUE_SIZE, 4,
 		//C.EGL_DEPTH_SIZE, 1,
-		C.EGL_RENDERABLE_TYPE, C.EGL_OPENGL_ES2_BIT,
-		C.EGL_SURFACE_TYPE, C.EGL_WINDOW_BIT,
-		C.EGL_NONE,
+		egl.RENDERABLE_TYPE, egl.OPENGL_ES2_BIT,
+		egl.SURFACE_TYPE, egl.WINDOW_BIT,
+		egl.NONE,
 	}
 
-	var config C.EGLConfig
-	var num_configs C.EGLint
-	if C.eglChooseConfig(eglDisp, (*C.EGLint)(unsafe.Pointer(&eglAttribs[0])), &config, 1, &num_configs) != C.EGL_TRUE {
+	var config egl.Config
+	var num_configs int32
+	if !egl.ChooseConfig(eglDisp, eglAttribs, &config, 1, &num_configs) {
 		panic("Error: couldn't get an EGL visual config\n")
 	}
 
@@ -439,13 +439,13 @@ func onNativeWindowCreated(act *C.ANativeActivity, win unsafe.Pointer) {
 	state := states[act]
 	if state.renderState == nil {
 		state.renderState = &renderState{
-			disp: getEGLDisp(C.EGLNativeDisplayType(nil)),
+			disp: getEGLDisp(egl.NativeDisplayType(nil)),
 		}
 		state.renderState.conf = chooseEGLConfig(state.renderState.disp)
 	}
 	vid := getEGLNativeVisualId(state.renderState.disp, state.renderState.conf)
 	C.ANativeWindow_setBuffersGeometry((*[0]byte)(win), 0, 0, C.int32_t(vid))
-	state.renderState.surf = EGLCreateWindowSurface(state.renderState.disp, state.renderState.conf, C.EGLNativeWindowType(win))
+	state.renderState.surf = EGLCreateWindowSurface(state.renderState.disp, state.renderState.conf, egl.NativeWindowType(win))
 
 	state.mLoop.UpdateRenderState(state.renderState)
 	log.Printf("onNativeWindowCreated done\n")
